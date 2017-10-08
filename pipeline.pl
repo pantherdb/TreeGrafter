@@ -1,5 +1,8 @@
+#!/usr/bin/env perl
+
 use strict;
 use warnings;
+
 use Getopt::Long;
 use Try::Tiny;
 use Bio::TreeIO;
@@ -7,8 +10,10 @@ use JSON::Parse 'json_file_to_perl';
 use IO::String;
 use List::Util qw(min);
 
-my ($pantherdir,$pantherhmm,$fastafile,$outfile,$annotationfile,$raxmlloc,$hmmscanloc,$keep);
+my ($pantherdir,$pantherhmm,$fastafile,$outfile,$annotationfile,$raxmlloc,$hmmscanloc,$keep, $help);
+
 $Getopt::Long::ignorecase=0;
+
 &GetOptions
     (
      "p=s" => \$pantherdir, # -p for the PANTHER12 directory of trees and msfs
@@ -19,8 +24,10 @@ $Getopt::Long::ignorecase=0;
      "o=s" => \$outfile, # -o for the output file
      "a=s" => \$annotationfile, # -a for the annotation file
      "k=s" => \$keep, #-k for keeping the tmp files
-    );
+     "h"   => \$help, #print the usage statement
+    ) or die "Invalid option passed.\n";
 
+&usage if($help);
 &usage ("Please specify input fasta file\n") unless ($fastafile);
 &usage ("Please specify output file\n") unless ($outfile);
 &usage ("Please specify PANTHER12 hmm directory\n") unless ($pantherhmm);
@@ -35,7 +42,7 @@ if ($hmmscanloc){
 else{
   $hmmscancommand ="hmmscan --notextw -o $hmmscanout $pantherhmm/PANTHER12.0_all_fam.hmm $fastafile > /dev/null";}
 
-system($hmmscancommand);
+system($hmmscancommand) and die "Error running $hmmscancommand";
 
 my %annotations; my %pthrs;
 open ANO, "< $annotationfile" or die "cannot open $annotationfile\n";
