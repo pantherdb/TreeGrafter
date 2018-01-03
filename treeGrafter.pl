@@ -10,46 +10,78 @@ use JSON::Parse 'json_file_to_perl';
 use IO::String;
 use List::Util qw(min);
 
-my ($pantherdir,$pantherhmm,$fastafile,$outfile,$annotationfile,$raxmlloc,$hmmscanloc,$keep, $help);
+my ($pantherdir,$pantherhmm,$fastafile,$outfile,$annotationfile,$raxmlloc,$hmmerloc,$keep, 
+    $algo, $cpus,  $auto, $help);
 
 my $directory;
 $Getopt::Long::ignorecase=0;
+
+#Todos:
+#Make the hmmer location agnostic to whether you are running hmmscan or hmmsearch
+#Step the number of cpus
+#Auto detect whether hmmscan or hmmsearch should be used
+#Look for the press files if running hmmscan
+
 
 &GetOptions
     (
      "f=s" => \$fastafile, # -f for the input fasta file
      "r=s" => \$raxmlloc, # -r for the location of RAXML if not in PATH
-     "s=s" => \$hmmscanloc, # -s for the location of hmmscan if not in PATH
+     "s=s" => \$hmmerloc, # -s for the location of hmmscan if not in PATH
      "o=s" => \$outfile, # -o for the output file
      "d=s" => \$directory, # -d for directory of the package
+     "algo=s" => \$algo,
+     "auto" => \$auto,
+     "cpus=i" => \$cpus,
      "k=s" => \$keep, #-k for keeping the tmp files
      "h"   => \$help, #print the usage statement
     ) or die "Invalid option passed.\n";
 
+
 &usage if($help);
-&usage ("Please specify input fasta file\n") unless ($fastafile);
+
+#Make sure we know where we are going to write to.
 &usage ("Please specify output file\n") unless ($outfile);
-&usage ("Please specify the directory of the pipeline\n") unless ($directory);
 
-$pantherdir = "$directory/PANTHER12_Tree_MSF";
-$pantherhmm = "$directory/PANTHER12_famhmm";
-$annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
-
-open FINALOUT, "> $outfile" or die "cannot output to $outfile\n";
-
-#my $hmmscanout = "$fastafile.hmmscanout.$$";
-my $hmmscanout = "$fastafile.hmmscanout.5008";
-
-my $hmmscancommand;
-if ($hmmscanloc){
-  $hmmscancommand = "$hmmscanloc --notextw -o $hmmscanout $pantherhmm/PANTHER12.0_all_fam.hmm $fastafile > /dev/null";}
-else{
-  $hmmscancommand ="hmmscan --notextw -o $hmmscanout $pantherhmm/PANTHER12.0_all_fam.hmm $fastafile > /dev/null";}
-
-unless (-s $hmmscanout){
-  system($hmmscancommand) and die "Error running $hmmscancommand";
+#Check the fasta file is defined, present and has size 
+&usage ("Please specify input fasta file\n") unless ($fastafile);
+if(!-e $fastafile){
+  die "Your fasta file, $fastafile, does not exisit.\n";
+}elsif(! -s $fastafile){
+  die "Your fasta file, $fastafile, has not size\n";
 }
 
+#Check that the PANTHER directory is present, and contains the HMM files
+&usage ("Please specify the directory of the pipeline\n") unless ($directory);
+if(!-d $directory){
+  die "Your directory, $directory, does not exisit.\n";
+}
+
+#We expect this directory to have a certain structure
+#TODO:Deal with different releases, hardcoded to 12.0
+$pantherhmm = "$directory/PANTHER12_famhmm/PANTHER12.0_all_fam.hmm";
+if(!-e $pantherhmm){
+  die "The PANTHER hmm file, $pantherhmm, does not exist.\n";
+}elsif( !-s $pantherhmm ){
+  die "The PANTHER hmm file, $pantherhmm,  has no size.\n";
+}
+
+#Check that the directory containing the PANTHER alignments is present.
+$pantherdir = "$directory/PANTHER12_Tree_MSF";
+
+if(!-d $pantherdir){
+  die "The PANTHER alignments directory, $pantherdir, does not exisit.\n";
+}
+#-------------------------------------------------------------------------------------
+$annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
+
+if(!-e $annotationfile){
+  die "The PANTHER annotation file, $annotationfile, does not exist.\n";
+}elsif( !-s $annotationfile ){
+  die "The PANTHER hmm file, $annotationfile,  has no size.\n";
+}
+
+#Now read in the annotations file to work out which PANTHER entries have annotations.
 my %annotations; my %pthrs;
 open ANO, "< $annotationfile" or die "cannot open $annotationfile\n";
 while(<ANO>){
@@ -61,10 +93,66 @@ while(<ANO>){
 }
 close ANO;
 
+#-------------------------------------------------------------------------------------
+
+if($algo and $auto){
+  warn "Please specify either -algo <hmmscan|hmmsearch> or -auto, but not both.\n";
+  warn "If you are unsure, let the script decide the most efficient approach.\n"; 
+}
+
+if(defined($algo)){
+  #Check that the algorithm is either hmmscan or hmmsearch
+  if($algo !~ /^(hmmscan|hmmsearch)/){
+    print "Unknown algorithm $algo\n";
+  }
+}elsif(!defined($auto)){
+  $auto = 1;
+}
+
+#If we need to, auto detect the file
+if(defined($auto)){
+  #
+  $algo = autodetect($fastafile, $pantherhmm);
+}
+
+#Need to check for the presence of the hmmpress files
+if($algo eq "hmmscan"){
+  
+}
+
+#In the case of hmmer cpu=0 switches off threading. 
+#Otherwise hmmer will autodetect the number of CPUs
+#and use all of them, which does not work well on HPCs.
+
+if(!defined($cpus)){
+  $cpus = 0;
+}
+
+open (FINALOUT, '>',  $outfile) or die "cannot output to $outfile\n";
+
+#-------------------------------------------------------------------------------------
+#my $hmmscanout = "$fastafile.hmmscanout.$$"; #TODO replace this.
+my $hmmerout = "$fastafile.hmmerout"; 
+
+unless (-s $hmmerout){
+  my $hmmercommand;
+  if ($hmmerloc) {
+    $hmmercommand = "$hmmerloc/$algo --notextw --cpu $cpus -o $hmmerout $pantherhmm $fastafile > /dev/null";
+  } else {
+    $hmmercommand = "$algo --notextw --cpu $cpus -o $hmmerout $pantherhmm $fastafile > /dev/null";
+  }
+  system($hmmercommand) and die "Error running $hmmercommand";
+}
+
+
+#-------------------------------------------------------------------------------------
+#Now parse the hmmer output
+
+
 my $queryid;my $matchpthr; my @matchalign; my @hmmstart ; my @hmmend; my @codes; my @hmmalign;
 my $hmmline =0; my $domainline =0; my $alignmentline =0;
 my $matchn =0;
-open HMM, "< $hmmscanout" or die "cannot open $hmmscanout\n";
+open HMM, "< $hmmerout" or die "cannot open $hmmerout\n";
 while(<HMM>){
   $hmmline++;
   if ($_ =~ /^Query:\ +([^ ]+) /){
@@ -109,7 +197,7 @@ close FINALOUT;
 
 sub pipline{
   my ($queryid,$matchpthr,$matchalign,$hmmstart,$hmmend,$codes,$hmmalign) = @_;
-  print "$queryid,$matchpthr,$matchalign,$hmmstart,$hmmend,$code\n";
+  print "$queryid,$matchpthr,$matchalign,$hmmstart,$hmmend,$codes\n";
 #  return;
 ####################################################################
 # add the query sequence to precalculated PANTHER msf using hmmalign
