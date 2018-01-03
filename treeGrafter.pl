@@ -12,17 +12,16 @@ use List::Util qw(min);
 
 my ($pantherdir,$pantherhmm,$fastafile,$outfile,$annotationfile,$raxmlloc,$hmmscanloc,$keep, $help);
 
+my $directory;
 $Getopt::Long::ignorecase=0;
 
 &GetOptions
     (
-     "p=s" => \$pantherdir, # -p for the PANTHER12 directory of trees and msfs
-     "h=s" => \$pantherhmm, # -h for the PANTHER12 hmm directory with family only hmms
      "f=s" => \$fastafile, # -f for the input fasta file
      "r=s" => \$raxmlloc, # -r for the location of RAXML if not in PATH
      "s=s" => \$hmmscanloc, # -s for the location of hmmscan if not in PATH
      "o=s" => \$outfile, # -o for the output file
-     "a=s" => \$annotationfile, # -a for the annotation file
+     "d=s" => \$directory, # -d for directory of the package
      "k=s" => \$keep, #-k for keeping the tmp files
      "h"   => \$help, #print the usage statement
     ) or die "Invalid option passed.\n";
@@ -30,11 +29,16 @@ $Getopt::Long::ignorecase=0;
 &usage if($help);
 &usage ("Please specify input fasta file\n") unless ($fastafile);
 &usage ("Please specify output file\n") unless ($outfile);
-&usage ("Please specify PANTHER12 hmm directory\n") unless ($pantherhmm);
-&usage ("Please specify PANTHER12 directory of trees and msfs\n") unless ($pantherdir);
-&usage ("Please specify PANTHER12 GO annotation summary file\n") unless ($annotationfile);
+&usage ("Please specify the directory of the pipeline\n") unless ($directory);
 
-my $hmmscanout = "$fastafile.hmmscanout.$$";
+$pantherdir = "$directory/PANTHER12_Tree_MSF";
+$pantherhmm = "$directory/PANTHER12_famhmm";
+$annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
+
+open FINALOUT, "> $outfile" or die "cannot output to $outfile\n";
+
+#my $hmmscanout = "$fastafile.hmmscanout.$$";
+my $hmmscanout = "$fastafile.hmmscanout.5008";
 
 my $hmmscancommand;
 if ($hmmscanloc){
@@ -42,7 +46,9 @@ if ($hmmscanloc){
 else{
   $hmmscancommand ="hmmscan --notextw -o $hmmscanout $pantherhmm/PANTHER12.0_all_fam.hmm $fastafile > /dev/null";}
 
-system($hmmscancommand) and die "Error running $hmmscancommand";
+unless (-s $hmmscanout){
+  system($hmmscancommand) and die "Error running $hmmscancommand";
+}
 
 my %annotations; my %pthrs;
 open ANO, "< $annotationfile" or die "cannot open $annotationfile\n";
@@ -55,42 +61,67 @@ while(<ANO>){
 }
 close ANO;
 
-my $queryid;my $matchpthr;my $matchalign; my $hmmstart;my $hmmend;
-open HMM, "< $hmmscanout" or die;
+my $queryid;my $matchpthr; my @matchalign; my @hmmstart ; my @hmmend; my @codes; my @hmmalign;
+my $hmmline =0; my $domainline =0; my $alignmentline =0;
+my $matchn =0;
+open HMM, "< $hmmscanout" or die "cannot open $hmmscanout\n";
 while(<HMM>){
+  $hmmline++;
   if ($_ =~ /^Query:\ +([^ ]+) /){
     $queryid = $1;
   }
-  elsif ($_ =~ />> (PTHR[0-9]+)/){
-    $matchpthr = $1;
+  elsif ($_ =~ />> (PTHR[0-9]+)/){ # use the first match
+    $matchn++;
+    if ($matchn==1){$matchpthr = $1;}
+    next;
   }
-  elsif (($matchpthr) and ($_ =~ /$matchpthr[\w\.]+\ +([0-9]+) [\w\.]+ ([0-9]+)/)){
-    $hmmstart = $1;$hmmend = $2;
-  }
-  elsif ($queryid){
-    my @a = split(/ +/,$_);
-    if( ($a[1] eq $queryid)){
-      $matchalign = $a[3];
-      &pipline($queryid,$matchpthr,$matchalign,$hmmstart,$hmmend);
-      ($queryid,$matchpthr,$matchalign,$hmmstart,$hmmend) = ();
+  if ($matchn ==1){
+    if ($hmmline >= $domainline+4){
+      if ($_ =~ /!/){
+	my @a = split(/ +/);
+	push(@hmmstart,$a[7]);
+	push(@hmmend,$a[8]);
+      }
     }
+    if ($_ =~ /== domain/){
+      $alignmentline =$hmmline;
+    }
+    if ($hmmline == $alignmentline+1){
+      my @a = split(/ +/,$_);
+      push(@hmmalign,$a[3]);
+    }
+    elsif ($hmmline == $alignmentline+3){
+      my @a = split(/ +/,$_);
+      push(@matchalign,$a[3]);
+    }
+    elsif ($hmmline == $alignmentline+4){
+      my @a = split(/ +/,$_);
+      push(@codes,$a[1]);
+    }
+  }
+  if ($_ =~ /^\/\/$/){
+    &pipline($queryid,$matchpthr,\@matchalign,\@hmmstart,\@hmmend,\@codes,\@hmmalign);
+    ($queryid,$matchpthr,@matchalign,@hmmstart,@hmmend,@codes,@hmmalign,$matchn,$domainline,$alignmentline) = ();
   }
 }
 close HMM;
+close FINALOUT;
 
 sub pipline{
-  my ($queryid,$matchpthr,$matchalign,$hmmstart,$hmmend) = @_;
-#  print "$queryid,$matchpthr,$matchalign,$hmmstart,$hmmend\n";
+  my ($queryid,$matchpthr,$matchalign,$hmmstart,$hmmend,$codes,$hmmalign) = @_;
+  print "$queryid,$matchpthr,$matchalign,$hmmstart,$hmmend,$code\n";
+#  return;
 ####################################################################
 # add the query sequence to precalculated PANTHER msf using hmmalign
 ###################################################################
 
   unless (exists $pthrs{$matchpthr}){
     print "$queryid\t$matchpthr\tAnnotationsNotAvailable\n";
-    return;
+#    return;
   }
+  $queryid =~ s/[^\w]/\_/g;
   my $hmmalignmsf = "$pantherdir/$matchpthr.AN.fasta";
-  my $queryfasta = "./tmp/$queryid.$matchpthr.fasta";
+  my $queryfasta = "$directory/tmp/$queryid.$matchpthr.fasta";
   
   my $lines; my $lastline;
   open IN, "< $hmmalignmsf" or die;
@@ -106,28 +137,83 @@ sub pipline{
     }
   }
   close IN;
-  my $length_msf = ($lines-1)*80 + lengh($lastline);
+  my $length_msf = ($lines-1)*80 + length($lastline);
   my $querymsf;
-  foreach my $i (1..$hmmstart-1){
+
+  my $domains = scalar @$matchalign;
+  my $start = $hmmstart->[0];
+  my $align = $matchalign->[0];
+  my $halign = $hmmalign->[0];
+  my $code = $codes->[0];
+  foreach my $i (1..$start-1){
     $querymsf .= "-";
   }
-  $querymsf .= $matchalign;
-  foreach my $i ($hmmend+1..$length_msf){
+  my @aligna = split(//,$align);
+  my @codea = split(//,$code);
+  my @haligna = split(//,$halign);
+  my $alignas = length($code);
+  foreach my $a (0..$alignas-1){
+    my $aa = $aligna[$a]; 
+    my $c = $codea[$a];
+    my $haa = $haligna[$a];
+
+    if (($aa =~ /[A-Z]/) and ($haa eq ".")){
+      next;
+    }
+    $querymsf .= $aa;
+  }
+  foreach my $j (1..$domains-1){ 
+    my $start = $hmmstart->[$j];
+    my $align = $matchalign->[$j];
+    my $end = $hmmend->[$j-1];
+    foreach my $i ($end+1..$start-1){
+      $querymsf .= "-";
+    }
+    my $halign = $hmmalign->[$j];
+    my $code = $codes->[$j];
+    my @aligna = split(//,$align);
+    my @codea = split(//,$code);
+    my @haligna = split(//,$halign);
+    my $alignas = length($code);
+    foreach my $a (0..$alignas-1){
+      my $aa = $aligna[$a]; 
+      my $c = $codea[$a];
+      my $haa = $haligna[$a];
+
+      if (($aa =~ /[A-Z]/) and ($haa eq ".")){
+	next;
+      }
+      $querymsf .= $aa;
+    }
+  }
+  my $prevend = $hmmend->[$domains-1];
+  foreach my $i ($prevend..$length_msf-1){
     $querymsf .= "-";
   }
+  $querymsf = uc($querymsf);
+  my $l = length($querymsf);
+
   my @parts = $querymsf =~ /(.{1,80})/g;
-  open OUT,"> $queryfasta" or die;
-  print OUT ">query_$queryid";
+  open OUT,"> $queryfasta" or die "cannot open $queryfasta\n";
+ # print  ">query_$queryid\n";
+  print OUT ">query_$queryid\n";
   foreach my $line (@parts){
     print OUT "$line\n";
+  #  print "$line\n";
   }
   close OUT;
+  
+  unless ($l eq $length_msf){
+    print "ERROR MSF of $queryid should have length $length_msf, actual length is $l\n";
+    return;
+  }
+
   `cat $hmmalignmsf >> $queryfasta`;
   
   ###############################################################
   ###run RAxML ################################################## 
   ###############################################################
-  my $raxmldir = "./tmp/$matchpthr"."_$queryid"."_"."raxml$$";
+  my $raxmldir = "$directory/tmp/$matchpthr"."_$queryid"."_"."raxml$$";
   my $bifurnewick = "$pantherdir/$matchpthr.bifurcate.newick";
   unless (-e $bifurnewick) {print STDERR "no bifurcate newickfile for $matchpthr\n";return;};
 
@@ -145,14 +231,19 @@ sub pipline{
   unless ($mapANs){
     $mapANs = "root";
     my $annotation = $annotations{$matchpthr.":".$mapANs};
-    print "$queryid\t$matchpthr\t$annotation\n";
+    print FINALOUT "$queryid\t$matchpthr\t$annotation\n";
     return;
   }
   my $commonAN = &commonancestor($mapANs,$matchpthr);
   unless ($commonAN) {$commonAN = "root"};
   my $annotation = $annotations{$matchpthr.":".$commonAN};
-  print "$queryid\t$matchpthr\t$annotation\n";
+  print FINALOUT "$queryid\t$matchpthr\t$annotation\n";
+  unless($keep){
+    my $command = "rm -rf $directory/tmp/*";
+    system($command);
+  }
 }
+
 
 ############find common ancestor of a list of ANs which are leaf genes#########
 
@@ -168,7 +259,8 @@ sub commonancestor{
   my $tree = $treeio->next_tree;
   my $size = scalar @a;
   my @anceslist; my %anstore;
-  my $current = $a[0];
+  my $current = $tree->find_node(-id=>$a[0]);
+
   while(1){
     my $mom = $current->ancestor||last;
     unless ($mom->id) {last;}
@@ -177,7 +269,7 @@ sub commonancestor{
   }
 
   foreach my $i (1..$size-1){
-    my $current = $a[$i];
+    my $current = $tree->find_node(-id=>$a[$i]);
     while(1){
       my $mom = $current->ancestor||last;
       unless ($mom->id) {last;}
@@ -343,8 +435,7 @@ sub usage{
 tree grafting pipeline in Perl. This program grafts input sequences in fasta format to best positions in best-matching PANTHER trees
 
   Where args are:
-  -p for the PANTHER12 directory of trees and msfs
-  -h for the PANTHER12 hmm directory with family only hmms
+  -d for directory of the package
   -f for the input fasta file
   -r for the location of RAXML if not in PATH
   -s for the location of hmmscan if not in PATH
