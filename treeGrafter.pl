@@ -20,14 +20,9 @@ my ($fastafile,
     $keep, 
     $algo, 
     $cpus,  
-    $auto, 
+    $auto,
+    $hmmer,
     $help);
-
-
-#TODO:
-#Make the hmmer location agnostic to whether you are running hmmscan or hmmsearch
-#Auto detect whether hmmscan or hmmsearch should be used
-
 
 &GetOptions
     (
@@ -39,6 +34,7 @@ my ($fastafile,
      "algo=s" => \$algo,
      "auto" => \$auto,
      "cpus=i" => \$cpus,
+     "hmmer=s" => \$hmmer,
      "k" => \$keep, #-k for keeping the tmp files
      "h"   => \$help, #print the usage statement
     ) or die "Invalid option passed.\n";
@@ -46,13 +42,14 @@ my ($fastafile,
 
 my $options = {};
 processOptions( $options, $help, $outfile, $directory, $fastafile, 
-               $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep);
+               $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $hmmer, $keep);
 #-------------------------------------------------------------------------------------
 #This is really the main body of the script
 
 
 my $matches = {};
-runhmmer($options);
+
+runhmmer($options) unless($options->{hmmerprecal});
 
 #Parse the hmmer results
 parsehmmer($options, $matches );
@@ -150,7 +147,6 @@ sub processOptions {
 
   #If we need to, auto detect the file
   if(defined($auto)){
-    #TODO: implements autodetect
     $algo = autodetect($options);
   }
 
@@ -173,7 +169,15 @@ sub processOptions {
     }
   }
   $options->{algo} = $algo; 
-  $options->{hmmerout} = "$fastafile.$algo.out"; 
+  if($hmmer){
+    #Check that the algo is set.
+    #Then check that the file is present.
+    $options->{hmmerprecal} = 1; 
+    $options->{hmmerout} = $hmmer; 
+  }else{
+    $options->{hmmerout} = "$fastafile.$algo.out"; 
+  }
+
   $options->{hmmerloc} = $hmmerloc if($hmmerloc);
   $options->{raxmlloc} = $raxmlloc if($raxmlloc);
   $options->{keep} = 1 if($keep); 
@@ -198,7 +202,7 @@ sub runhmmer {
     }
 
     $hmmercommand .= $options->{algo}. " --notextw --cpu ". 
-                     $options->{cpus}. "-o ".
+                     $options->{cpus}. " -o ".
                      $options->{hmmerout}. " ".
                      $options->{pantherhmm}." ".
                      $options->{fastafile}." > /dev/null";
@@ -689,18 +693,18 @@ sub autodetect {
   print "Reading HMM file\n";
   my $hmmsize = 0;
   open(HMM, "<", $options->{pantherhmm}) or die "Could not open $options->{pantherhmm}:[$!]\n";
-  while(<>){
-  if(/^LENG  (\d+)/){
-    $hmmsize += $1;
+  while(<HMM>){
+    if(/^LENG  (\d+)/){
+      $hmmsize += $1;
     }
   }
   close(HMM);
 
   #Now, multiple by 40, as residue for residues, a profile HMM is 40x bigger than a sequence
   $hmmsize = $hmmsize * 40;
-  print "$hmmsize\n";
+  print "hmm database size in memory: $hmmsize\n";
   
-  #Now, read the fasta file.  As soon as it is bigger than size variable, it is more efficient to use hmmsearch
+  #Now, read the fasta file.  As soon as it is bigger than hmmsize variable, it is more efficient to use hmmsearch
   my $fastasize = 0;
   my $algo = 'hmmscan';
 
@@ -708,14 +712,14 @@ sub autodetect {
   while(<FA>){
     next if(/^>/);
     chomp;
-    $fastasize .= length;
+    $fastasize += length;
     if($fastasize > $hmmsize){
       $algo= 'hmmsearch';
       last;
     }
   }
   close(FA);
-
+  print "fasta file size in memory: $fastasize\n";
   print "Best algorithm is $algo\n";
   return $algo;
 }
