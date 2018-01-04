@@ -34,7 +34,7 @@ $Getopt::Long::ignorecase=0;
      "algo=s" => \$algo,
      "auto" => \$auto,
      "cpus=i" => \$cpus,
-     "k=s" => \$keep, #-k for keeping the tmp files
+     "k" => \$keep, #-k for keeping the tmp files
      "h"   => \$help, #print the usage statement
     ) or die "Invalid option passed.\n";
 
@@ -146,96 +146,135 @@ if(!defined($cpus)){
   $cpus = 0;
 }
 
-open (FINALOUT, '>',  $outfile) or die "cannot open $outfile\n";
-
 #-------------------------------------------------------------------------------------
+#This is really the main body of the script
+
+my %matches;
 #my $hmmscanout = "$fastafile.hmmscanout.$$"; #TODO replace this.
 my $hmmerout = "$fastafile.$algo.out"; 
+runhmmer($fastafile, $algo, $hmmerloc, $pantherhmm, $hmmerout);
+parsehmmer($hmmerout, \%matches);
+graftMatches($outfile, \%matches, $pantherdir, $directory);
 
-unless (-s $hmmerout){
-  my $hmmercommand;
-  if ($hmmerloc) {
-    $hmmercommand = "$hmmerloc/$algo --notextw --cpu $cpus -o $hmmerout $pantherhmm $fastafile > /dev/null";
-  } else {
-    $hmmercommand = "$algo --notextw --cpu $cpus -o $hmmerout $pantherhmm $fastafile > /dev/null";
+#-------------------------------------------------------------------------------------
+
+sub runhmmer {
+  my($fastafile, $algo, $hmmerloc, $pantherhmm, $hmmerout) = @_;
+  if (!-s $hmmerout){
+    my $hmmercommand = '';
+    if ($hmmerloc) {
+      $hmmercommand = "$hmmerloc/";
+    }
+    $hmmercommand .= "$algo --notextw --cpu $cpus -o $hmmerout $pantherhmm $fastafile > /dev/null";
+    
+    system($hmmercommand) and die "Error running $hmmercommand";
   }
-  system($hmmercommand) and die "Error running $hmmercommand";
 }
 
 
 #-------------------------------------------------------------------------------------
 #Now parse the hmmer output
 
+sub parsehmmer {
+  my ($hmmerout, $matches ) = @_;
 
-my $queryid;my $matchpthr; my @matchalign; my @hmmstart ; my @hmmend; my @codes; my @hmmalign;
-my $hmmline =0; my $domainline =0; my $alignmentline =0;
-my $matchn =0;
-open HMM, "< $hmmerout" or die "cannot open $hmmerout\n";
-while(<HMM>){
-  $hmmline++;
-  if ($_ =~ /^Query:\ +([^ ]+) /){
-    $queryid = $1;
-  }elsif ($_ =~ />> (PTHR[0-9]+)/){ # use the first match
-    $matchn++;
-    if ($matchn==1){
-      $matchpthr = $1;
-    }
-    next;
-  }
+  my $queryid;my $matchpthr; 
+  my $hmmline =0; my $domainline =0; my $alignmentline =0;
+  my $matchn =0;
 
-  if ($matchn ==1){
-    if ($hmmline >= $domainline+4){
-      if ($_ =~ /!/){
-	      my @a = split(/ +/);
-	      push(@hmmstart,$a[7]);
-	      push(@hmmend,$a[8]);
+  #TODO - this is written for hmmscan, will need to change for hmmscan.
+  open HMM, "<",  $hmmerout or die "cannot open $hmmerout\n";
+  while(<HMM>){
+    #Ignore hmmer header lines.
+    next if(/^#/);
+
+    $hmmline++;
+    if ($_ =~ /^Query:\s+(\S+) /){
+      $queryid = $1;
+      next;
+    }elsif ($_ =~ /^>> (PTHR[0-9]+)/){ # use the first match
+      $matchn++;
+      if ($matchn==1){
+        $matchpthr = $1;
       }
+      next;
     }
 
-    if ($_ =~ /== domain/){
-      $alignmentline = $hmmline;
+    #This simple takes the first alignment (best match)
+    #What happens in the case of gene fusion events? 
+      # How many times does a sequence match two PANTHER entries?
+    if ($matchn ==1){
+      if ($hmmline >= 4){
+        if ($_ =~ /!/){
+	        my @a = split(/ +/);
+	        push(@{$matches->{$matchpthr}->{$queryid}->{hmmstart}}, $a[7]);
+	        push(@{$matches->{$matchpthr}->{$queryid}->{hmmend}},   $a[8]);
+        }
+      }
+
+      if ($_ =~ /== domain/){
+        $alignmentline = $hmmline;
+      }
+
+      if ($hmmline == $alignmentline+1){
+        my @a = split(/ +/,$_);
+	      push(@{$matches->{$matchpthr}->{$queryid}->{hmmalign}},   $a[3]);
+      }elsif ($hmmline == $alignmentline+3){
+        my @a = split(/ +/,$_);
+	      push(@{$matches->{$matchpthr}->{$queryid}->{matchalign}},   $a[3]);
+      } 
     }
 
-    if ($hmmline == $alignmentline+1){
-      my @a = split(/ +/,$_);
-      push(@hmmalign,$a[3]);
-    }
-    elsif ($hmmline == $alignmentline+3){
-      my @a = split(/ +/,$_);
-      push(@matchalign,$a[3]);
-    }
-    elsif ($hmmline == $alignmentline+4){
-      my @a = split(/ +/,$_);
-      push(@codes,$a[1]);
+    if ($_ =~ /^\/\/$/){
+      ($queryid,$matchpthr,$domainline,$alignmentline) = ();
+      $hmmline = $domainline = $alignmentline = $matchn = 0;
     }
   }
-  if ($_ =~ /^\/\/$/){
-    &pipline($queryid,$matchpthr,\@matchalign,\@hmmstart,\@hmmend,\@codes,\@hmmalign);
-    ($queryid,$matchpthr,@matchalign,@hmmstart,@hmmend,@codes,@hmmalign,$matchn,$domainline,$alignmentline) = ();
-    $hmmline = $domainline = $alignmentline = $matchn = 0;
-  }
+  close HMM;
 }
-close HMM;
-close FINALOUT;
 
-sub pipline{
-  my ($queryid,$matchpthr,$matchalign,$hmmstart,$hmmend,$codes,$hmmalign) = @_;
-  print "$queryid,$matchpthr,$matchalign,$hmmstart,$hmmend,$codes\n";
-#  return;
-####################################################################
-# add the query sequence to precalculated PANTHER msf using hmmalign
-###################################################################
+sub graftMatches {
+  my ( $outfile, $matches, $pantherdir, $directory) = @_;
+  open (FINALOUT, '>',  $outfile) or die "cannot open $outfile\n";
+  foreach my $pthr (keys(%$matches)){
+  #Make sure that we have annotations for this!
+    unless (exists $pthrs{$pthr}){
+      foreach my $queryid (keys %{$matches->{$pthr}}){
+        warn "$queryid\t$pthr\tAnnotationsNotAvailable\n";
+      }
+      next;
+    }
 
-  unless (exists $pthrs{$matchpthr}){
-    print "$queryid\t$matchpthr\tAnnotationsNotAvailable\n";
-#    return;
-  }
-  $queryid =~ s/[^\w]/\_/g;
-  my $hmmalignmsf = "$pantherdir/$matchpthr.AN.fasta";
-  my $queryfasta = "$directory/tmp/$queryid.$matchpthr.fasta";
+    #Now get the length of the file.
+    my $pthrAlignLength = _getAlignLength($pantherdir, $pthr);
+    if($pthrAlignLength < 1){
+      warn "Could not find alignment for $pthr\n";
+      next;
+    }
   
+    foreach my $queryid (keys %{$matches->{$pthr}}){
+      _graftPipeline($queryid, $pthr, $pthrAlignLength, $matches->{$pthr}->{$queryid}, $directory, $pantherdir, $keep);
+    }
+  }
+  close FINALOUT;
+}
+
+#---------------------------------------------------------------
+sub _getAlignLength {
+  my($pantherdir, $matchpthr) = @_;
+
+  #Deterine the length of the PANTHER alignment. This does assume
+  #that every position in the alignment is a match state.
+  #This also assumes that the alignment are wrapped at 80 chars
+
+  my $hmmalignmsf = "$pantherdir/$matchpthr.AN.fasta";
+  if(!-e $hmmalignmsf or !-s $hmmalignmsf){
+    return 0;
+  }
+
+
   my $lines; my $lastline;
-  open IN, "< $hmmalignmsf" or die;
+  open IN, "< $hmmalignmsf" or die "Could not open $hmmalignmsf:[$!]";
   my $first = <IN>;
   while(<IN>){
     chomp;
@@ -249,81 +288,122 @@ sub pipline{
   }
   close IN;
   my $length_msf = ($lines-1)*80 + length($lastline);
-  my $querymsf;
+  
+  return ($length_msf);
+}  
 
-  my $domains = scalar @$matchalign;
-  my $start = $hmmstart->[0];
-  my $align = $matchalign->[0];
-  my $halign = $hmmalign->[0];
-  my $code = $codes->[0];
+#---------------------------------------------------------------
+sub _graftPipeline{
+  my ($queryid, $matchpthr, $length_msf, $matchdata, $directory, $pantherdir, $keep) = @_;
+  
+  my $querymsf = _querymsf($matchdata, $length_msf, $queryid);
+  return unless($querymsf);
+  
+  my $queryfasta = _generateFasta($querymsf, $directory, $matchpthr, $queryid, $pantherdir);
+  _runRAxMLAndAnnotate( $pantherdir, $directory, $queryid, $matchpthr, $queryfasta);
+  
+  $keep = 1;
+  unless($keep){
+    my $command = "rm -rf $directory/tmp/*";
+    system($command);
+  }
+}
+
+#---------------------------------------------------------------
+
+sub _querymsf {
+  my ($matchdata, $length_msf, $queryid) = @_;
+
+  #Now build up the query sequence    
+  my $querymsf; #aligned sequence placeholder
+
+  my $start = $matchdata->{hmmstart}->[0];
+  #N-terminaly padd the sequence
   foreach my $i (1..$start-1){
     $querymsf .= "-";
   }
-  my @aligna = split(//,$align);
-  my @codea = split(//,$code);
-  my @haligna = split(//,$halign);
-  my $alignas = length($code);
+  
+  #For the first element/domain, extract the query string
+  my @aligna = split(//,$matchdata->{matchalign}->[0]);
+  my @haligna = split(//,$matchdata->{hmmalign}->[0]);
+  my $alignas = length($matchdata->{hmmalign}->[0]);
   foreach my $a (0..$alignas-1){
-    my $aa = $aligna[$a]; 
-    my $c = $codea[$a];
-    my $haa = $haligna[$a];
-
-    if (($aa =~ /[A-Z]/) and ($haa eq ".")){
-      next;
-    }
-    $querymsf .= $aa;
+    next if (($haligna[$a] eq ".")); #hmm insert state
+    $querymsf .= $aligna[$a];
   }
+
+  #Now we need to add in any additional domains in the next part
+  my $domains = scalar @{$matchdata->{matchalign}};
   foreach my $j (1..$domains-1){ 
-    my $start = $hmmstart->[$j];
-    my $align = $matchalign->[$j];
-    my $end = $hmmend->[$j-1];
+    my $start = $matchdata->{hmmstart}->[$j];
+    my $end = $matchdata->{hmmend}->[$j-1];
+    #This bridges the gap between the hits
     foreach my $i ($end+1..$start-1){
       $querymsf .= "-";
     }
-    my $halign = $hmmalign->[$j];
-    my $code = $codes->[$j];
-    my @aligna = split(//,$align);
-    my @codea = split(//,$code);
-    my @haligna = split(//,$halign);
-    my $alignas = length($code);
+    
+    my @aligna = split(//,$matchdata->{matchalign}->[$j]);
+    my @haligna = split(//,$matchdata->{hmmalign}->[$j]);
+    my $alignas = length($matchdata->{hmmalign}->[$j]);
     foreach my $a (0..$alignas-1){
-      my $aa = $aligna[$a]; 
-      my $c = $codea[$a];
-      my $haa = $haligna[$a];
-
-      if (($aa =~ /[A-Z]/) and ($haa eq ".")){
-	next;
-      }
-      $querymsf .= $aa;
+      next if ($haligna[$a] eq "."); #insert state, so skipping.
+      $querymsf .= $aligna[$a];
     }
   }
-  my $prevend = $hmmend->[$domains-1];
+
+  #Pad out as necessary
+  my $prevend = $matchdata->{hmmend}->[$domains-1];
   foreach my $i ($prevend..$length_msf-1){
     $querymsf .= "-";
   }
-  $querymsf = uc($querymsf);
+
   my $l = length($querymsf);
+  unless ($l eq $length_msf){
+    print "ERROR MSF of $queryid should have length $length_msf, actual length is $l\n";
+    return 0;
+  }
+
+  $querymsf = uc($querymsf);
+  return $querymsf;
+} 
+
+
+#---------------------------------------------------------------
+# Write out the sequence file and concatenate.
+
+sub _generateFasta {
+  my ($querymsf, $directory, $matchpthr, $queryid, $pantherdir) = @_; 
 
   my @parts = $querymsf =~ /(.{1,80})/g;
+  $queryid =~ s/[^\w]/\_/g;
+  my $queryfasta = "$directory/tmp/$queryid.$matchpthr.fasta";
   open OUT,"> $queryfasta" or die "cannot open $queryfasta\n";
- # print  ">query_$queryid\n";
   print OUT ">query_$queryid\n";
   foreach my $line (@parts){
     print OUT "$line\n";
-  #  print "$line\n";
-  }
-  close OUT;
-  
-  unless ($l eq $length_msf){
-    print "ERROR MSF of $queryid should have length $length_msf, actual length is $l\n";
-    return;
   }
 
-  `cat $hmmalignmsf >> $queryfasta`;
-  
+  my $hmmalignmsf = "$pantherdir/$matchpthr.AN.fasta";
+  #Concatenate the alignment. 
+  open(A, "<", $hmmalignmsf) or die "Failed to open $hmmalignmsf for reading:[$!]\n";
+  while(<A>){
+    print OUT $_;
+  }
+  close(A);
+  close OUT;
+   
+  return $queryfasta;
+}
+#---------------------------------------------------------------
+
+
+sub _runRAxMLAndAnnotate {
+  my ($pantherdir, $directory, $queryid, $matchpthr, $queryfasta) = @_;  
   ###############################################################
   ###run RAxML ################################################## 
   ###############################################################
+  #TODO:make sure this tmp dir is unique to the process.
+  $queryid =~ s/[^\w]/\_/g;
   my $raxmldir = "$directory/tmp/$matchpthr"."_$queryid"."_"."raxml$$";
   my $bifurnewick = "$pantherdir/$matchpthr.bifurcate.newick";
   unless (-e $bifurnewick) {print STDERR "no bifurcate newickfile for $matchpthr\n";return;};
@@ -331,29 +411,41 @@ sub pipline{
   mkdir($raxmldir); my $raxmlcommand;
   if ($raxmlloc){
   $raxmlcommand = "$raxmlloc -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG  -s $queryfasta -n $matchpthr -w $raxmldir "; }
-  else{ $raxmlcommand = "raxmlHPC-SSE3 -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG -T 4 -s $queryfasta -n $matchpthr -w $raxmldir >/dev/null";}
-  try{ system($raxmlcommand); } catch {
-    warn "caught error for $queryid $matchpthr: $_";
-  };
+  else{ 
+   
+    $raxmlcommand = "raxmlHPC-SSE3 -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG -T 4 -s $queryfasta -n $matchpthr -w $raxmldir >/dev/null";}
+    
+    try{ 
+      system($raxmlcommand); } 
+    catch {
+      warn "caught error for $queryid $matchpthr: $_";
+    };
 
   ## now find the location of the graft sequence in the tree 
   my $mapANs;
   try { $mapANs = &mapto($raxmldir,$matchpthr,"query_$queryid");} catch{ warn "caught error in mapto for $queryid $matchpthr $_";};
+  
   unless ($mapANs){
     $mapANs = "root";
     my $annotation = $annotations{$matchpthr.":".$mapANs};
     print FINALOUT "$queryid\t$matchpthr\t$annotation\n";
     return;
   }
+
   my $commonAN = &commonancestor($mapANs,$matchpthr);
   unless ($commonAN) {$commonAN = "root"};
   my $annotation = $annotations{$matchpthr.":".$commonAN};
+  
+  #TODO: add this to a scalar.
   print FINALOUT "$queryid\t$matchpthr\t$annotation\n";
-  unless($keep){
-    my $command = "rm -rf $directory/tmp/*";
-    system($command);
-  }
 }
+
+
+
+
+#RDF checked up to here!
+
+
 
 
 ############find common ancestor of a list of ANs which are leaf genes#########
