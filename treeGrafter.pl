@@ -4,24 +4,29 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use IO::String;
 use Try::Tiny;
 use Bio::TreeIO;
 use JSON::Parse 'json_file_to_perl';
-use IO::String;
-use List::Util qw(min);
 use Cwd 'abs_path';
 
-my ($pantherdir,$pantherhmm,$fastafile,$outfile,$annotationfile,$raxmlloc,$hmmerloc,$keep, 
-    $algo, $cpus,  $auto, $help);
-
-my $directory;
 $Getopt::Long::ignorecase=0;
 
-#Todos:
+my ($fastafile, 
+    $outfile, 
+    $raxmlloc, 
+    $hmmerloc, 
+    $directory, 
+    $keep, 
+    $algo, 
+    $cpus,  
+    $auto, 
+    $help);
+
+
+#TODO:
 #Make the hmmer location agnostic to whether you are running hmmscan or hmmsearch
-#Step the number of cpus
 #Auto detect whether hmmscan or hmmsearch should be used
-#Look for the press files if running hmmscan
 
 
 &GetOptions
@@ -39,133 +44,164 @@ $Getopt::Long::ignorecase=0;
     ) or die "Invalid option passed.\n";
 
 
-&usage if($help);
-
-#Make sure we know where we are going to write to.
-&usage ("Please specify output file\n") unless ($outfile);
-
-#Check the fasta file is defined, present and has size 
-&usage ("Please specify input fasta file\n") unless ($fastafile);
-if(!-e $fastafile){
-  die "Your fasta file, $fastafile, does not exisit.\n";
-}elsif(! -s $fastafile){
-  die "Your fasta file, $fastafile, has not size\n";
-}
-
-#Check that the PANTHER directory is present, and contains the HMM files
-&usage ("Please specify the directory of the pipeline\n") unless ($directory);
-# Need to make sure this directory is an absolute path, RaxML requires this.
-$directory = abs_path($directory);
-
-if(!-d $directory){
-  die "Your directory, $directory, does not exisit.\n";
-}
-
-#We expect this directory to have a certain structure
-#TODO:Deal with different releases, hardcoded to 12.0
-$pantherhmm = "$directory/PANTHER12_famhmm/PANTHER12.0_all_fam.hmm";
-if(!-e $pantherhmm){
-  die "The PANTHER hmm file, $pantherhmm, does not exist.\n";
-}elsif( !-s $pantherhmm ){
-  die "The PANTHER hmm file, $pantherhmm,  has no size.\n";
-}
-
-#Check that the directory containing the PANTHER alignments is present.
-$pantherdir = "$directory/PANTHER12_Tree_MSF";
-
-if(!-d $pantherdir){
-  die "The PANTHER alignments directory, $pantherdir, does not exisit.\n";
-}
-#-------------------------------------------------------------------------------------
-$annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
-
-if(!-e $annotationfile){
-  die "The PANTHER annotation file, $annotationfile, does not exist.\n";
-}elsif( !-s $annotationfile ){
-  die "The PANTHER hmm file, $annotationfile,  has no size.\n";
-}
-
-#Now read in the annotations file to work out which PANTHER entries have annotations.
-my %annotations; my %pthrs;
-open ANO, "< $annotationfile" or die "cannot open $annotationfile\n";
-while(<ANO>){
-  chomp;
-  my @array = split(/\t/);
-  $annotations{$array[0]} = $array[1];
-  my @a = split(/:/,$array[0]);
-  $pthrs{$a[0]} =1; # store the PANTHER families with annotations
-}
-close ANO;
-
-#-------------------------------------------------------------------------------------
-
-if($algo and $auto){
-  warn "Please specify either -algo <hmmscan|hmmsearch> or -auto, but not both.\n";
-  warn "If you are unsure, let the script decide the most efficient approach.\n"; 
-}
-
-if(defined($algo)){
-  #Check that the algorithm is either hmmscan or hmmsearch
-  if($algo !~ /^(hmmscan|hmmsearch)/){
-    print "Unknown algorithm $algo\n";
-  }
-}elsif(!defined($auto)){
-  $auto = 1;
-}
-
-#If we need to, auto detect the file
-if(defined($auto)){
-  #TODO: implements autodetect
-  $algo = autodetect($fastafile, $pantherhmm);
-}
-
-#Need to check for the presence of the hmmpress files
-if($algo eq "hmmscan"){
-  my $error = 0;
-  foreach my $ext (qw(h3f h3i h3m h3p)){
-    if(!-e $pantherhmm.".$ext"){
-      $error = 1; 
-    }
-  }
-  if($error){
-    my $hmmpress = '';
-    if($hmmerloc){
-      $hmmpress .= $hmmerloc."/";
-    }
-    $hmmpress .= "hmmpress";
-
-    system("$hmmpress $pantherhmm") and die "Error running hmmpress\n";
-  }
-}
-
-#In the case of hmmer cpu=0 switches off threading. 
-#Otherwise hmmer will autodetect the number of CPUs
-#and use all of them, which does not work well on HPCs.
-
-if(!defined($cpus)){
-  $cpus = 0;
-}
-
+my $options = {};
+processOptions( $options, $help, $outfile, $directory, $fastafile, 
+               $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep);
 #-------------------------------------------------------------------------------------
 #This is really the main body of the script
 
-my %matches;
-#my $hmmscanout = "$fastafile.hmmscanout.$$"; #TODO replace this.
-my $hmmerout = "$fastafile.$algo.out"; 
-runhmmer($fastafile, $algo, $hmmerloc, $pantherhmm, $hmmerout);
-parsehmmer($hmmerout, \%matches);
-graftMatches($outfile, \%matches, $pantherdir, $directory);
+
+my $matches = {};
+runhmmer($options);
+
+#Parse the hmmer results
+parsehmmer($options, $matches );
+
+#Now that we have parsed the HMMER searc/scan results, graft the matched into the tree.
+my $allResults = [];
+graftMatches($options, $matches, $allResults);
+
+#Now print out the results.
+printResults($options, $allResults);
+
+exit;
+#--------------------------------------------------------------------------------------
+
+sub processOptions {
+  my ( $options, $help, $outfile, $directory, $fastafile, 
+        $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep) = @_;
+
+  &usage if($help);
+
+  #Make sure we know where we are going to write to.
+  &usage ("Please specify output file\n") unless ($outfile);
+  $options->{outfile} = $outfile;
+
+  #Check the fasta file is defined, present and has size 
+  &usage ("Please specify input fasta file\n") unless ($fastafile);
+  if(!-e $fastafile){
+    die "Your fasta file, $fastafile, does not exisit.\n";
+  }elsif(! -s $fastafile){
+    die "Your fasta file, $fastafile, has no size\n";
+  }
+  $options->{fastafile} = $fastafile;
+  
+
+  #Check that the PANTHER directory is present, and contains the HMM files
+  &usage ("Please specify the directory of the pipeline\n") unless ($directory);
+  # Need to make sure this directory is an absolute path, RaxML requires this.
+  $directory = abs_path($directory);
+
+  if(!-d $directory){
+    die "Your directory, $directory, does not exisit.\n";
+  }
+  $options->{directory} = $directory;
+
+  #We expect this directory to have a certain structure
+  #TODO:Deal with different releases, hardcoded to 12.0
+  my $pantherhmm = "$directory/PANTHER12_famhmm/PANTHER12.0_all_fam.hmm";
+  if(!-e $pantherhmm){
+    die "The PANTHER hmm file, $pantherhmm, does not exist.\n";
+  }elsif( !-s $pantherhmm ){
+    die "The PANTHER hmm file, $pantherhmm,  has no size.\n";
+  }
+  $options->{pantherhmm} = $pantherhmm;
+  #Check that the directory containing the PANTHER alignments is present.
+  my $pantherdir = "$directory/PANTHER12_Tree_MSF";
+
+  if(!-d $pantherdir){
+    die "The PANTHER alignments directory, $pantherdir, does not exisit.\n";
+  }
+  $options->{pantherdir} = $pantherdir;
+  #-------------------------------------------------------------------------------------
+  my $annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
+
+  if(!-e $annotationfile){
+    die "The PANTHER annotation file, $annotationfile, does not exist.\n";
+  }elsif( !-s $annotationfile ){
+    die "The PANTHER hmm file, $annotationfile,  has no size.\n";
+  }
+
+  #Now read in the annotations file to work out which PANTHER entries have annotations.
+  open ANO, "<", $annotationfile or die "cannot open $annotationfile\n";
+  while(<ANO>){
+    chomp;
+    my @array = split(/\t/);
+    $options->{annotations}->{$array[0]} = $array[1];
+    my @a = split(/:/,$array[0]);
+    $options->{pthrAnn}->{$a[0]} = 1; # store the PANTHER families with annotations
+  }
+  close ANO;
+#-------------------------------------------------------------------------------------
+
+  if($algo and $auto){
+    warn "Please specify either -algo <hmmscan|hmmsearch> or -auto, but not both.\n";
+    warn "If you are unsure, let the script decide the most efficient approach.\n"; 
+  }
+
+  if(defined($algo)){
+    #Check that the algorithm is either hmmscan or hmmsearch
+    if($algo !~ /^(hmmscan|hmmsearch)/){
+      print "Unknown algorithm $algo\n";
+    }
+  }elsif(!defined($auto)){
+    $auto = 1;
+  }
+
+  #If we need to, auto detect the file
+  if(defined($auto)){
+    #TODO: implements autodetect
+    $algo = autodetect($options);
+  }
+
+  #Need to check for the presence of the hmmpress files
+  if($algo eq "hmmscan"){
+    my $error = 0;
+    foreach my $ext (qw(h3f h3i h3m h3p)){
+      if(!-e $pantherhmm.".$ext"){
+        $error = 1; 
+      }
+    }
+    if($error){
+      my $hmmpress = '';
+      if($hmmerloc){
+        $hmmpress .= $hmmerloc."/";
+      }
+      $hmmpress .= "hmmpress";
+
+      system("$hmmpress $pantherhmm") and die "Error running hmmpress\n";
+    }
+  }
+  $options->{algo} = $algo; 
+  $options->{hmmerout} = "$fastafile.$algo.out"; 
+  $options->{hmmerloc} = $hmmerloc if($hmmerloc);
+  $options->{raxmlloc} = $raxmlloc if($raxmlloc);
+  $options->{keep} = 1 if($keep); 
+  #In the case of hmmer cpu=0 switches off threading. 
+  #Otherwise hmmer will autodetect the number of CPUs
+  # and use all of them, which does not work well on HPCs.
+
+  if(!defined($cpus)){
+    $cpus = 0;
+  }
+  $options->{cpus} = $cpus;
+}
 
 #-------------------------------------------------------------------------------------
 
 sub runhmmer {
-  my($fastafile, $algo, $hmmerloc, $pantherhmm, $hmmerout) = @_;
-  if (!-s $hmmerout){
+  my($options) = @_;
+  if (!-s $options->{hmmerout}){
     my $hmmercommand = '';
-    if ($hmmerloc) {
-      $hmmercommand = "$hmmerloc/";
+    if (defined($options->{hmmerloc})) {
+      $hmmercommand = $options->{hmmerloc}."/";
     }
-    $hmmercommand .= "$algo --notextw --cpu $cpus -o $hmmerout $pantherhmm $fastafile > /dev/null";
+
+    $hmmercommand .= $options->{algo}. " --notextw --cpu ". 
+                     $options->{cpus}. "-o ".
+                     $options->{hmmerout}. " ".
+                     $options->{pantherhmm}." ".
+                     $options->{fastafile}." > /dev/null";
     
     system($hmmercommand) and die "Error running $hmmercommand";
   }
@@ -176,14 +212,14 @@ sub runhmmer {
 #Now parse the hmmer output
 
 sub parsehmmer {
-  my ($hmmerout, $matches ) = @_;
+  my ($options, $matches ) = @_;
 
   my $queryid;my $matchpthr; 
   my $hmmline =0; my $domainline =0; my $alignmentline =0;
   my $matchn =0;
 
   #TODO - this is written for hmmscan, will need to change for hmmscan.
-  open HMM, "<",  $hmmerout or die "cannot open $hmmerout\n";
+  open HMM, "<",  $options->{hmmerout} or die "cannot open ".$options->{hmmerout}."\n";
   while(<HMM>){
     #Ignore hmmer header lines.
     next if(/^#/);
@@ -233,12 +269,15 @@ sub parsehmmer {
   close HMM;
 }
 
+
+
+#-------------------------------------------------------------------------------------
+
 sub graftMatches {
-  my ( $outfile, $matches, $pantherdir, $directory) = @_;
-  open (FINALOUT, '>',  $outfile) or die "cannot open $outfile\n";
+  my ( $options, $matches, $allResults) = @_;
   foreach my $pthr (keys(%$matches)){
   #Make sure that we have annotations for this!
-    unless (exists $pthrs{$pthr}){
+    unless (exists $options->{pthrAnn}->{$pthr}){
       foreach my $queryid (keys %{$matches->{$pthr}}){
         warn "$queryid\t$pthr\tAnnotationsNotAvailable\n";
       }
@@ -246,28 +285,40 @@ sub graftMatches {
     }
 
     #Now get the length of the file.
-    my $pthrAlignLength = _getAlignLength($pantherdir, $pthr);
+    my $pthrAlignLength = _getAlignLength($options, $pthr);
     if($pthrAlignLength < 1){
       warn "Could not find alignment for $pthr\n";
       next;
     }
   
     foreach my $queryid (keys %{$matches->{$pthr}}){
-      _graftPipeline($queryid, $pthr, $pthrAlignLength, $matches->{$pthr}->{$queryid}, $directory, $pantherdir, $keep);
+      my $res = _graftPipeline($options, $queryid, $pthr, $pthrAlignLength, $matches->{$pthr}->{$queryid});
+      if(defined $res){
+        push(@$allResults, $res);
+      }
     }
+  }
+}
+#-------------------------------------------------------------------------------------
+
+sub printResults{
+  my($options, $allResults) = @_; 
+  open (FINALOUT, '>',  $options->{outfile}) or die "cannot open ".$options->{outfile}."\n";
+  foreach my $res (@$allResults){
+    print FINALOUT $res;
   }
   close FINALOUT;
 }
 
 #---------------------------------------------------------------
 sub _getAlignLength {
-  my($pantherdir, $matchpthr) = @_;
+  my($options, $matchpthr) = @_;
 
   #Deterine the length of the PANTHER alignment. This does assume
   #that every position in the alignment is a match state.
   #This also assumes that the alignment are wrapped at 80 chars
 
-  my $hmmalignmsf = "$pantherdir/$matchpthr.AN.fasta";
+  my $hmmalignmsf = $options->{pantherdir}."/$matchpthr.AN.fasta";
   if(!-e $hmmalignmsf or !-s $hmmalignmsf){
     return 0;
   }
@@ -294,19 +345,20 @@ sub _getAlignLength {
 
 #---------------------------------------------------------------
 sub _graftPipeline{
-  my ($queryid, $matchpthr, $length_msf, $matchdata, $directory, $pantherdir, $keep) = @_;
+  my ($options, $queryid, $matchpthr, $length_msf, $matchdata) = @_;
   
   my $querymsf = _querymsf($matchdata, $length_msf, $queryid);
   return unless($querymsf);
   
-  my $queryfasta = _generateFasta($querymsf, $directory, $matchpthr, $queryid, $pantherdir);
-  _runRAxMLAndAnnotate( $pantherdir, $directory, $queryid, $matchpthr, $queryfasta);
+  my $queryfasta = _generateFasta($options, $querymsf, $matchpthr, $queryid);
+  my $resString  = _runRAxMLAndAnnotate( $options, $queryid, $matchpthr, $queryfasta);
   
-  $keep = 1;
-  unless($keep){
-    my $command = "rm -rf $directory/tmp/*";
+  unless($options->{keep}){
+    my $command = "rm -rf ".$options->{directory}."/tmp/*";
+    #TODO - try and replace with perl solution.
     system($command);
   }
+  return($resString);
 }
 
 #---------------------------------------------------------------
@@ -372,18 +424,18 @@ sub _querymsf {
 # Write out the sequence file and concatenate.
 
 sub _generateFasta {
-  my ($querymsf, $directory, $matchpthr, $queryid, $pantherdir) = @_; 
+  my ($options, $querymsf, $matchpthr, $queryid) = @_; 
 
   my @parts = $querymsf =~ /(.{1,80})/g;
   $queryid =~ s/[^\w]/\_/g;
-  my $queryfasta = "$directory/tmp/$queryid.$matchpthr.fasta";
+  my $queryfasta = $options->{directory}."/tmp/$queryid.$matchpthr.fasta";
   open OUT,"> $queryfasta" or die "cannot open $queryfasta\n";
   print OUT ">query_$queryid\n";
   foreach my $line (@parts){
     print OUT "$line\n";
   }
 
-  my $hmmalignmsf = "$pantherdir/$matchpthr.AN.fasta";
+  my $hmmalignmsf = $options->{pantherdir}."/$matchpthr.AN.fasta";
   #Concatenate the alignment. 
   open(A, "<", $hmmalignmsf) or die "Failed to open $hmmalignmsf for reading:[$!]\n";
   while(<A>){
@@ -398,46 +450,50 @@ sub _generateFasta {
 
 
 sub _runRAxMLAndAnnotate {
-  my ($pantherdir, $directory, $queryid, $matchpthr, $queryfasta) = @_;  
+  my ($options, $queryid, $matchpthr, $queryfasta) = @_;  
   ###############################################################
   ###run RAxML ################################################## 
   ###############################################################
   #TODO:make sure this tmp dir is unique to the process.
   $queryid =~ s/[^\w]/\_/g;
-  my $raxmldir = "$directory/tmp/$matchpthr"."_$queryid"."_"."raxml$$";
-  my $bifurnewick = "$pantherdir/$matchpthr.bifurcate.newick";
-  unless (-e $bifurnewick) {print STDERR "no bifurcate newickfile for $matchpthr\n";return;};
+  my $raxmldir = $options->{directory}."/tmp/$matchpthr"."_$queryid"."_"."raxml$$";
+  my $bifurnewick = $options->{pantherdir}."/$matchpthr.bifurcate.newick";
+  if (! -e $bifurnewick) {
+    print STDERR "no bifurcate newickfile for $matchpthr\n";
+    return;
+  };
 
-  mkdir($raxmldir); my $raxmlcommand;
-  if ($raxmlloc){
-  $raxmlcommand = "$raxmlloc -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG  -s $queryfasta -n $matchpthr -w $raxmldir "; }
-  else{ 
-   
-    $raxmlcommand = "raxmlHPC-SSE3 -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG -T 4 -s $queryfasta -n $matchpthr -w $raxmldir >/dev/null";}
+  mkdir($raxmldir) or die "failed to make the direcorry $raxmldir:[$!]\n"; 
+  
+  my $raxmlcommand = '';
+  if (defined($options->{raxmlloc})){
+    $raxmlcommand = $options->{raxmlloc}."/";
+  } 
+  $raxmlcommand .= "raxmlHPC-SSE3 -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG -T 4 -s $queryfasta -n $matchpthr -w $raxmldir >/dev/null";
     
-    try{ 
-      system($raxmlcommand); } 
-    catch {
-      warn "caught error for $queryid $matchpthr: $_";
-    };
+  try{ 
+    system($raxmlcommand); } 
+  catch {
+    warn "caught error for $queryid $matchpthr: $_";
+  };
 
   ## now find the location of the graft sequence in the tree 
   my $mapANs;
-  try { $mapANs = &mapto($raxmldir,$matchpthr,"query_$queryid");} catch{ warn "caught error in mapto for $queryid $matchpthr $_";};
+  try { $mapANs = &mapto($raxmldir,$matchpthr,"query_$queryid"); } 
+  catch{ warn "caught error in mapto for $queryid $matchpthr $_";};
   
-  unless ($mapANs){
+  my $result;
+  if(!$mapANs){  
     $mapANs = "root";
-    my $annotation = $annotations{$matchpthr.":".$mapANs};
-    print FINALOUT "$queryid\t$matchpthr\t$annotation\n";
-    return;
+    my $annotation = $options->{annotations}->{$matchpthr.":".$mapANs};
+    $result = "$queryid\t$matchpthr\t$annotation\n";
+  }else{
+    my $commonAN = &commonancestor($options, $mapANs, $matchpthr);
+    if (!$commonAN) {$commonAN = "root"};
+    my $annotation = $options->{annotations}->{$matchpthr.":".$commonAN};
+    $result = "$queryid\t$matchpthr\t$annotation\n";
   }
-
-  my $commonAN = &commonancestor($mapANs,$matchpthr);
-  unless ($commonAN) {$commonAN = "root"};
-  my $annotation = $annotations{$matchpthr.":".$commonAN};
-  
-  #TODO: add this to a scalar.
-  print FINALOUT "$queryid\t$matchpthr\t$annotation\n";
+  return $result;
 }
 
 
@@ -451,13 +507,13 @@ sub _runRAxMLAndAnnotate {
 ############find common ancestor of a list of ANs which are leaf genes#########
 
 sub commonancestor{
-  my $mapANs = shift;
-  my $matchpthr = shift;
+  my ($options, $mapANs, $matchpthr) = @_;
+  
   my @a = split(/;/,$mapANs);
   unless ($a[1]){
     return $mapANs;
   }
-  my $newick = $pantherdir."/$matchpthr.newick";
+  my $newick = $options->{pantherdir}."/$matchpthr.newick";
   my $treeio = Bio::TreeIO->new(-file => $newick, -format => "newick");
   my $tree = $treeio->next_tree;
   my $size = scalar @a;
@@ -534,9 +590,9 @@ sub mapto{
   $treestring =~ s/AN[0-9]+//g;
   
   # modification of the tree string to simple newick format 
-  my $io = IO::String->new($treestring);
+  #my $io = IO::String->new($treestring);
 
-  my $input = Bio::TreeIO->new(-fh => $io, -format => "newick");
+  my $input = Bio::TreeIO->new(-fh => IO::String->new($treestring), -format => "newick");
   my $rtree = $input->next_tree;
 
   # find the nodes, and find their common ancestor
@@ -627,6 +683,42 @@ sub mapto{
   }
 }
 
+sub autodetect {
+  my ($options) = @_;  
+
+  print "Reading HMM file\n";
+  my $hmmsize = 0;
+  open(HMM, "<", $options->{pantherhmm}) or die "Could not open $options->{pantherhmm}:[$!]\n";
+  while(<>){
+  if(/^LENG  (\d+)/){
+    $hmmsize += $1;
+    }
+  }
+  close(HMM);
+
+  #Now, multiple by 40, as residue for residues, a profile HMM is 40x bigger than a sequence
+  $hmmsize = $hmmsize * 40;
+  print "$hmmsize\n";
+  
+  #Now, read the fasta file.  As soon as it is bigger than size variable, it is more efficient to use hmmsearch
+  my $fastasize = 0;
+  my $algo = 'hmmscan';
+
+  open(FA, "<", $options->{fastafile}) or die "Could not open $options->{fastafile}:[$!]\n";
+  while(<FA>){
+    next if(/^>/);
+    chomp;
+    $fastasize .= length;
+    if($fastasize > $hmmsize){
+      $algo= 'hmmsearch';
+      last;
+    }
+  }
+  close(FA);
+
+  print "Best algorithm is $algo\n";
+  return $algo;
+}
 
 sub usage{
   my $errorm=shift;
@@ -634,6 +726,7 @@ sub usage{
     print "\nError: $errorm\n";
   }
 
+#TODO - this need updating.
   print qq(
 tree grafting pipeline in Perl. This program grafts input sequences in fasta format to best positions in best-matching PANTHER trees
 
