@@ -9,6 +9,7 @@ use Bio::TreeIO;
 use JSON::Parse 'json_file_to_perl';
 use IO::String;
 use List::Util qw(min);
+use Cwd 'abs_path';
 
 my ($pantherdir,$pantherhmm,$fastafile,$outfile,$annotationfile,$raxmlloc,$hmmerloc,$keep, 
     $algo, $cpus,  $auto, $help);
@@ -53,6 +54,9 @@ if(!-e $fastafile){
 
 #Check that the PANTHER directory is present, and contains the HMM files
 &usage ("Please specify the directory of the pipeline\n") unless ($directory);
+# Need to make sure this directory is an absolute path, RaxML requires this.
+$directory = abs_path($directory);
+
 if(!-d $directory){
   die "Your directory, $directory, does not exisit.\n";
 }
@@ -111,13 +115,27 @@ if(defined($algo)){
 
 #If we need to, auto detect the file
 if(defined($auto)){
-  #
+  #TODO: implements autodetect
   $algo = autodetect($fastafile, $pantherhmm);
 }
 
 #Need to check for the presence of the hmmpress files
 if($algo eq "hmmscan"){
-  
+  my $error = 0;
+  foreach my $ext (qw(h3f h3i h3m h3p)){
+    if(!-e $pantherhmm.".$ext"){
+      $error = 1; 
+    }
+  }
+  if($error){
+    my $hmmpress = '';
+    if($hmmerloc){
+      $hmmpress .= $hmmerloc."/";
+    }
+    $hmmpress .= "hmmpress";
+
+    system("$hmmpress $pantherhmm") and die "Error running hmmpress\n";
+  }
 }
 
 #In the case of hmmer cpu=0 switches off threading. 
@@ -128,11 +146,11 @@ if(!defined($cpus)){
   $cpus = 0;
 }
 
-open (FINALOUT, '>',  $outfile) or die "cannot output to $outfile\n";
+open (FINALOUT, '>',  $outfile) or die "cannot open $outfile\n";
 
 #-------------------------------------------------------------------------------------
 #my $hmmscanout = "$fastafile.hmmscanout.$$"; #TODO replace this.
-my $hmmerout = "$fastafile.hmmerout"; 
+my $hmmerout = "$fastafile.$algo.out"; 
 
 unless (-s $hmmerout){
   my $hmmercommand;
@@ -157,23 +175,27 @@ while(<HMM>){
   $hmmline++;
   if ($_ =~ /^Query:\ +([^ ]+) /){
     $queryid = $1;
-  }
-  elsif ($_ =~ />> (PTHR[0-9]+)/){ # use the first match
+  }elsif ($_ =~ />> (PTHR[0-9]+)/){ # use the first match
     $matchn++;
-    if ($matchn==1){$matchpthr = $1;}
+    if ($matchn==1){
+      $matchpthr = $1;
+    }
     next;
   }
+
   if ($matchn ==1){
     if ($hmmline >= $domainline+4){
       if ($_ =~ /!/){
-	my @a = split(/ +/);
-	push(@hmmstart,$a[7]);
-	push(@hmmend,$a[8]);
+	      my @a = split(/ +/);
+	      push(@hmmstart,$a[7]);
+	      push(@hmmend,$a[8]);
       }
     }
+
     if ($_ =~ /== domain/){
-      $alignmentline =$hmmline;
+      $alignmentline = $hmmline;
     }
+
     if ($hmmline == $alignmentline+1){
       my @a = split(/ +/,$_);
       push(@hmmalign,$a[3]);
@@ -190,6 +212,7 @@ while(<HMM>){
   if ($_ =~ /^\/\/$/){
     &pipline($queryid,$matchpthr,\@matchalign,\@hmmstart,\@hmmend,\@codes,\@hmmalign);
     ($queryid,$matchpthr,@matchalign,@hmmstart,@hmmend,@codes,@hmmalign,$matchn,$domainline,$alignmentline) = ();
+    $hmmline = $domainline = $alignmentline = $matchn = 0;
   }
 }
 close HMM;
@@ -308,7 +331,7 @@ sub pipline{
   mkdir($raxmldir); my $raxmlcommand;
   if ($raxmlloc){
   $raxmlcommand = "$raxmlloc -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG  -s $queryfasta -n $matchpthr -w $raxmldir "; }
-  else{ $raxmlcommand = "raxmlHPC-SSE3 -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG  -s $queryfasta -n $matchpthr -w $raxmldir ";}
+  else{ $raxmlcommand = "raxmlHPC-SSE3 -f y -p 12345 -t $bifurnewick -G 0.05 -m PROTGAMMAWAG -T 4 -s $queryfasta -n $matchpthr -w $raxmldir >/dev/null";}
   try{ system($raxmlcommand); } catch {
     warn "caught error for $queryid $matchpthr: $_";
   };
