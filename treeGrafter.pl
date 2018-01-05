@@ -68,7 +68,7 @@ sub processOptions {
   my ( $options, $help, $outfile, $directory, $fastafile, 
         $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep) = @_;
 
-  &usage if($help);
+  &usage(0) if($help);
 
   #Make sure we know where we are going to write to.
   &usage ("Please specify output file\n") unless ($outfile);
