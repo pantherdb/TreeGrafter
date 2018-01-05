@@ -110,3 +110,24 @@ Troubleshooting:
 Ultimately, if you have any problems, please contact us at: feedback@pantherdb.org
 
 ##########
+
+Generating and using PAR file
+
+When using Perl scripts it can be a pain to install all of the dependencies and there
+can be "drift" in functionality of the external Perl modules that this script was
+originally written for.  To migate this, we have generate a standalone executable
+that should contain all of the dependencies.
+
+To generate the PAR package, you need to have install PAR and have the pp (PAR
+packager) installed.  Once the script is working on the command line, simple
+execute the following command:
+
+pp -o treeGrafter treeGrafter.pl 
+
+This will generate and executable treeGrafter.  You run this in the same way as 
+is outlined for the original script. 
+
+This executable is available from ** 
+
+
+
