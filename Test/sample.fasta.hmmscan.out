@@ -1,12 +1,13 @@
 # hmmscan :: search sequence(s) against a profile database
-# HMMER 3.1b2 (February 2015); http://hmmer.org/
-# Copyright (C) 2015 Howard Hughes Medical Institute.
+# HMMER 3.1b2 (January 2014); http://hmmer.org/
+# Copyright (C) 2014 Howard Hughes Medical Institute.
 # Freely distributed under the GNU General Public License (GPLv3).
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# query sequence file:             sample.fasta.n
-# target HMM database:             /home/pmd-02/pdt/pdthomas/users/haiming/TREEMETHOD/treegraftingpipeline//PANTHER12_famhmm/PANTHER12.0_all_fam.hmm
-# output directed to file:         sample.fasta.n.hmmscanout.5008
+# query sequence file:             sample.fasta
+# target HMM database:             treeGrafter1.01/PANTHER12_famhmm/PANTHER12.0_all_fam.hmm
+# output directed to file:         sample.fasta.hmmerout
 # max ASCII text line length:      unlimited
+# number of worker threads:        0
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Query:       STRCO|Gene=CAB44512|UniProtKB=Q9XAS3  [L=255]
@@ -116,8 +117,8 @@ Passed Vit filter:                        23  (0.00156356); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.77u 0.61s 00:00:01.38 Elapsed: 00:00:00.88
-# Mc/sec: 1925.40
+# CPU time: 0.32u 0.45s 00:00:00.77 Elapsed: 00:00:01.22
+# Mc/sec: 1388.81
 //
 Query:       STAA8|EnsemblGenome=SAOUHSC_02831|UniProtKB=Q2FVA2  [L=247]
 Scores for complete sequence (score includes all domains):
@@ -286,8 +287,8 @@ Passed Vit filter:                        42  (0.0028552); expected 14.7 (0.001)
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.85u 0.68s 00:00:01.53 Elapsed: 00:00:00.91
-# Mc/sec: 1803.51
+# CPU time: 0.32u 0.23s 00:00:00.55 Elapsed: 00:00:00.62
+# Mc/sec: 2647.09
 //
 Query:       VITVI|EnsemblGenome=VIT_04s0008g00450|UniProtKB=D7STJ2  [L=264]
 Scores for complete sequence (score includes all domains):
@@ -588,8 +589,8 @@ Passed Vit filter:                        59  (0.00401088); expected 14.7 (0.001
 Passed Fwd filter:                        16  (0.0010877); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              16  [number of targets reported over threshold]
-# CPU time: 0.98u 0.74s 00:00:01.72 Elapsed: 00:00:00.97
-# Mc/sec: 1808.40
+# CPU time: 0.36u 0.25s 00:00:00.61 Elapsed: 00:00:00.70
+# Mc/sec: 2505.93
 //
 Query:       STRR6|EnsemblGenome=spr1125|UniProtKB=Q8DPK0  [L=248]
 Scores for complete sequence (score includes all domains):
@@ -691,8 +692,8 @@ Passed Vit filter:                        34  (0.00231135); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.87u 0.63s 00:00:01.50 Elapsed: 00:00:00.89
-# Mc/sec: 1851.51
+# CPU time: 0.31u 0.25s 00:00:00.56 Elapsed: 00:00:00.66
+# Mc/sec: 2496.73
 //
 Query:       SULSO|EnsemblGenome=SSO0094|UniProtKB=P95967  [L=217]
 Scores for complete sequence (score includes all domains):
@@ -969,8 +970,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.88u 0.63s 00:00:01.51 Elapsed: 00:00:00.90
-# Mc/sec: 1602.07
+# CPU time: 0.33u 0.23s 00:00:00.56 Elapsed: 00:00:00.62
+# Mc/sec: 2325.58
 //
 Query:       TRYB2|Gene=Tb11.02.5270|UniProtKB=Q384S8  [L=247]
 Scores for complete sequence (score includes all domains):
@@ -1131,8 +1132,8 @@ Passed Vit filter:                        39  (0.00265126); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.94u 0.66s 00:00:01.60 Elapsed: 00:00:00.92
-# Mc/sec: 1783.91
+# CPU time: 0.33u 0.24s 00:00:00.57 Elapsed: 00:00:00.65
+# Mc/sec: 2524.92
 //
 Query:       DICTD|EnsemblGenome=Dtur_1616|UniProtKB=B8E2P5  [L=232]
 Scores for complete sequence (score includes all domains):
@@ -1228,8 +1229,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.84u 0.72s 00:00:01.56 Elapsed: 00:00:00.91
-# Mc/sec: 1693.99
+# CPU time: 0.32u 0.25s 00:00:00.57 Elapsed: 00:00:00.66
+# Mc/sec: 2335.65
 //
 Query:       ENTHI|EnsemblGenome=EHI_003000|UniProtKB=C4M9L1  [L=250]
 Scores for complete sequence (score includes all domains):
@@ -1529,8 +1530,8 @@ Passed Vit filter:                        91  (0.00618627); expected 14.7 (0.001
 Passed Fwd filter:                        17  (0.00115568); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              17  [number of targets reported over threshold]
-# CPU time: 1.11u 0.83s 00:00:01.94 Elapsed: 00:00:00.98
-# Mc/sec: 1695.03
+# CPU time: 0.43u 0.25s 00:00:00.68 Elapsed: 00:00:00.78
+# Mc/sec: 2129.65
 //
 Query:       SCHPO|PomBase=SPBC215.10|UniProtKB=O94314  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -1666,8 +1667,8 @@ Passed Vit filter:                        38  (0.00258328); expected 14.7 (0.001
 Passed Fwd filter:                         6  (0.000407886); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               6  [number of targets reported over threshold]
-# CPU time: 0.87u 0.62s 00:00:01.49 Elapsed: 00:00:00.89
-# Mc/sec: 1926.16
+# CPU time: 0.32u 0.24s 00:00:00.56 Elapsed: 00:00:00.64
+# Mc/sec: 2678.57
 //
 Query:       LEPIN|EnsemblGenome=LB_007|UniProtKB=Q8EY50  [L=252]
 Scores for complete sequence (score includes all domains):
@@ -1802,8 +1803,8 @@ Passed Vit filter:                        42  (0.0028552); expected 14.7 (0.001)
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.84u 0.63s 00:00:01.47 Elapsed: 00:00:00.89
-# Mc/sec: 1881.37
+# CPU time: 0.30u 0.24s 00:00:00.54 Elapsed: 00:00:00.60
+# Mc/sec: 2790.70
 //
 Query:       STAA8|EnsemblGenome=SAOUHSC_02396|UniProtKB=Q2FWA2  [L=244]
 Scores for complete sequence (score includes all domains):
@@ -1817,7 +1818,7 @@ Scores for complete sequence (score includes all domains):
      0.0002   20.7   0.1       0.14   11.5   0.0    2.5  2  PTHR42891.orig.30.pir  
     0.00051   18.9   0.0       0.07   11.9   0.0    2.6  3  PTHR43768.orig.30.pir  
     0.00059   18.1   0.1     0.0012   17.1   0.0    1.5  2  PTHR21485.orig.30.pir  
-     0.0013   17.8   0.1         11    4.9   0.0    3.9  4  PTHR18901.orig.30.pir  
+     0.0013   17.8   0.1         12    4.8   0.0    3.9  4  PTHR18901.orig.30.pir  
      0.0046   16.0   0.0       0.22   10.5   0.0    2.1  1  PTHR43885.orig.30.pir  
      0.0047   15.9   0.1      0.015   14.2   0.0    1.9  2  PTHR43192.orig.30.pir  
   ------ inclusion threshold ------
@@ -1977,9 +1978,9 @@ Domain annotation for each model (and alignments):
 >> PTHR18901.orig.30.pir  
    #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
  ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
-   1 ?    4.5   0.1     0.014        15      10      25 ..       2      17 ..       1      25 [. 0.82
-   2 ?    4.9   0.0      0.01        11     101     132 ..      25      56 ..      17      73 .. 0.84
-   3 ?    1.8   0.0     0.087        99     101     129 ..     138     166 ..      74     173 .. 0.78
+   1 ?    4.5   0.0     0.014        15      10      25 ..       2      17 ..       1      25 [. 0.82
+   2 ?    4.8   0.0     0.011        12     101     132 ..      25      56 ..      18      73 .. 0.84
+   3 ?    1.8   0.0     0.089     1e+02     101     129 ..     138     166 ..      74     172 .. 0.78
    4 ?    1.7   0.0     0.099   1.1e+02     164     179 ..     182     197 ..     176     225 .. 0.89
 
   Alignments for each domain:
@@ -1989,13 +1990,13 @@ Domain annotation for each model (and alignments):
   STAA8|EnsemblGenome=SAOUHSC_02396|UniProtKB=Q2FWA2  2 NVKAIFLDMDGTILHE 17
                                                         699**********954 PP
 
-  == domain 2  score: 4.9 bits;  conditional E-value: 0.01
+  == domain 2  score: 4.8 bits;  conditional E-value: 0.011
                                PTHR18901.orig.30.pir 101 veelleelkrrglplavasssrrrnverklae 132
                                                           ++++++l+++g ++ +a++++ +++++ + +
   STAA8|EnsemblGenome=SAOUHSC_02396|UniProtKB=Q2FWA2  25 TKDVINQLREKGYKVFLATGRSHSEIHQLVPQ 56 
                                                          589*******************9999887665 PP
 
-  == domain 3  score: 1.8 bits;  conditional E-value: 0.087
+  == domain 3  score: 1.8 bits;  conditional E-value: 0.089
                                PTHR18901.orig.30.pir 101 veelleelkrrglplavasssrrrnverk 129
                                                          ++ + +elk+++++   +s+s+r n+e +
   STAA8|EnsemblGenome=SAOUHSC_02396|UniProtKB=Q2FWA2 138 ITAFRDELKQNHVQQISVSNSSRFNAETM 166
@@ -2100,8 +2101,8 @@ Passed Vit filter:                        50  (0.00339905); expected 14.7 (0.001
 Passed Fwd filter:                        13  (0.000883753); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              13  [number of targets reported over threshold]
-# CPU time: 0.94u 0.77s 00:00:01.71 Elapsed: 00:00:00.95
-# Mc/sec: 1706.59
+# CPU time: 0.34u 0.24s 00:00:00.58 Elapsed: 00:00:00.64
+# Mc/sec: 2533.22
 //
 Query:       ECOLI|EcoGene=EG14039|UniProtKB=P76329  [L=221]
 Scores for complete sequence (score includes all domains):
@@ -2217,8 +2218,8 @@ Passed Vit filter:                        34  (0.00231135); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.83u 0.56s 00:00:01.39 Elapsed: 00:00:00.86
-# Mc/sec: 1707.49
+# CPU time: 0.28u 0.22s 00:00:00.50 Elapsed: 00:00:00.55
+# Mc/sec: 2669.89
 //
 Query:       MONBE|Gene=28576|UniProtKB=A9V8K6  [L=95]
 Scores for complete sequence (score includes all domains):
@@ -2253,8 +2254,8 @@ Passed Vit filter:                        20  (0.00135962); expected 14.7 (0.001
 Passed Fwd filter:                         1  (6.7981e-05); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               1  [number of targets reported over threshold]
-# CPU time: 0.69u 0.53s 00:00:01.22 Elapsed: 00:00:00.85
-# Mc/sec: 742.62
+# CPU time: 0.21u 0.21s 00:00:00.42 Elapsed: 00:00:00.45
+# Mc/sec: 1402.73
 //
 Query:       STAA8|EnsemblGenome=SAOUHSC_00909|UniProtKB=Q2FZT1  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -2424,8 +2425,8 @@ Passed Vit filter:                        62  (0.00421482); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.88u 0.76s 00:00:01.64 Elapsed: 00:00:00.95
-# Mc/sec: 1797.52
+# CPU time: 0.33u 0.24s 00:00:00.57 Elapsed: 00:00:00.63
+# Mc/sec: 2710.54
 //
 Query:       BACCR|EnsemblGenome=BC_4063|UniProtKB=Q819C3  [L=245]
 Scores for complete sequence (score includes all domains):
@@ -2547,8 +2548,8 @@ Passed Vit filter:                        39  (0.00265126); expected 14.7 (0.001
 Passed Fwd filter:                         6  (0.000407886); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               6  [number of targets reported over threshold]
-# CPU time: 0.88u 0.68s 00:00:01.56 Elapsed: 00:00:00.91
-# Mc/sec: 1788.91
+# CPU time: 0.32u 0.23s 00:00:00.55 Elapsed: 00:00:00.61
+# Mc/sec: 2668.70
 //
 Query:       DEIRA|EnsemblGenome=DR_2147|UniProtKB=Q9RSH7  [L=192]
 Scores for complete sequence (score includes all domains):
@@ -2644,8 +2645,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.74u 0.58s 00:00:01.31 Elapsed: 00:00:00.86
-# Mc/sec: 1483.43
+# CPU time: 0.26u 0.22s 00:00:00.48 Elapsed: 00:00:00.51
+# Mc/sec: 2501.46
 //
 Query:       CHLTR|EnsemblGenome=CT_103|UniProtKB=O84105  [L=252]
 Scores for complete sequence (score includes all domains):
@@ -2741,8 +2742,8 @@ Passed Vit filter:                        39  (0.00265126); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.82u 0.65s 00:00:01.47 Elapsed: 00:00:00.88
-# Mc/sec: 1902.75
+# CPU time: 0.29u 0.22s 00:00:00.51 Elapsed: 00:00:00.57
+# Mc/sec: 2886.93
 //
 Query:       POPTR|EnsemblGenome=POPTR_0006s25190|UniProtKB=U5G8T6  [L=35]
 Scores for complete sequence (score includes all domains):
@@ -2777,8 +2778,8 @@ Passed Vit filter:                        30  (0.00203943); expected 14.7 (0.001
 Passed Fwd filter:                         1  (6.7981e-05); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               1  [number of targets reported over threshold]
-# CPU time: 0.64u 0.61s 00:00:01.25 Elapsed: 00:00:00.87
-# Mc/sec: 267.31
+# CPU time: 0.19u 0.20s 00:00:00.39 Elapsed: 00:00:00.42
+# Mc/sec: 553.71
 //
 Query:       CLOBH|Gene_OrderedLocusName=CBO1173|UniProtKB=A5I113  [L=253]
 Scores for complete sequence (score includes all domains):
@@ -2974,8 +2975,8 @@ Passed Vit filter:                        31  (0.00210741); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.88u 0.57s 00:00:01.45 Elapsed: 00:00:00.87
-# Mc/sec: 1932.26
+# CPU time: 0.30u 0.21s 00:00:00.51 Elapsed: 00:00:00.54
+# Mc/sec: 3113.08
 //
 Query:       SYNY3|Gene=BAA18460|UniProtKB=P74365  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -3404,8 +3405,8 @@ Passed Vit filter:                        47  (0.00319511); expected 14.7 (0.001
 Passed Fwd filter:                        21  (0.0014276); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              21  [number of targets reported over threshold]
-# CPU time: 1.03u 0.71s 00:00:01.74 Elapsed: 00:00:00.96
-# Mc/sec: 1792.63
+# CPU time: 0.37u 0.22s 00:00:00.59 Elapsed: 00:00:00.63
+# Mc/sec: 2731.63
 //
 Query:       BACSU|EnsemblGenome=BSU14550|UniProtKB=Q45494  [L=246]
 Scores for complete sequence (score includes all domains):
@@ -3673,8 +3674,8 @@ Passed Vit filter:                        50  (0.00339905); expected 14.7 (0.001
 Passed Fwd filter:                        14  (0.000951734); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              14  [number of targets reported over threshold]
-# CPU time: 0.88u 0.66s 00:00:01.54 Elapsed: 00:00:00.92
-# Mc/sec: 1776.69
+# CPU time: 0.35u 0.23s 00:00:00.57 Elapsed: 00:00:00.63
+# Mc/sec: 2594.52
 //
 Query:       SORBI|EnsemblGenome=Sb03g034080|UniProtKB=C5XJ74  [L=264]
 Scores for complete sequence (score includes all domains):
@@ -4023,8 +4024,8 @@ Passed Vit filter:                        67  (0.00455472); expected 14.7 (0.001
 Passed Fwd filter:                        17  (0.00115568); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              17  [number of targets reported over threshold]
-# CPU time: 0.96u 0.72s 00:00:01.68 Elapsed: 00:00:00.94
-# Mc/sec: 1866.12
+# CPU time: 0.37u 0.25s 00:00:00.62 Elapsed: 00:00:00.69
+# Mc/sec: 2542.25
 //
 Query:       STRCO|Gene=CAA22232|UniProtKB=Q9ZBX2  [L=249]
 Scores for complete sequence (score includes all domains):
@@ -4140,8 +4141,8 @@ Passed Vit filter:                        32  (0.00217539); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.83u 0.66s 00:00:01.49 Elapsed: 00:00:00.90
-# Mc/sec: 1838.32
+# CPU time: 0.32u 0.27s 00:00:00.59 Elapsed: 00:00:00.67
+# Mc/sec: 2469.38
 //
 Query:       DEIRA|EnsemblGenome=DR_0240|UniProtKB=Q9RXR7  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -4349,8 +4350,8 @@ Passed Vit filter:                        39  (0.00265126); expected 14.7 (0.001
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.89u 0.63s 00:00:01.52 Elapsed: 00:00:00.92
-# Mc/sec: 1848.91
+# CPU time: 0.34u 0.24s 00:00:00.58 Elapsed: 00:00:00.62
+# Mc/sec: 2743.54
 //
 Query:       FUSNN|EnsemblGenome=FN0869|UniProtKB=Q8RF49  [L=261]
 Scores for complete sequence (score includes all domains):
@@ -4659,8 +4660,8 @@ Passed Vit filter:                        57  (0.00387492); expected 14.7 (0.001
 Passed Fwd filter:                        15  (0.00101971); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              15  [number of targets reported over threshold]
-# CPU time: 0.95u 0.74s 00:00:01.69 Elapsed: 00:00:00.93
-# Mc/sec: 1864.75
+# CPU time: 0.38u 0.24s 00:00:00.62 Elapsed: 00:00:00.68
+# Mc/sec: 2550.32
 //
 Query:       TETTS|EnsemblGenome=TTHERM_00590270|UniProtKB=I7M2B5  [L=238]
 Scores for complete sequence (score includes all domains):
@@ -4728,8 +4729,8 @@ Passed Vit filter:                        30  (0.00203943); expected 14.7 (0.001
 Passed Fwd filter:                         3  (0.000203943); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               3  [number of targets reported over threshold]
-# CPU time: 0.79u 0.63s 00:00:01.42 Elapsed: 00:00:00.89
-# Mc/sec: 1776.85
+# CPU time: 0.29u 0.23s 00:00:00.52 Elapsed: 00:00:00.60
+# Mc/sec: 2635.66
 //
 Query:       LEIMA|EnsemblGenome=LmjF.28.1360|UniProtKB=Q4Q8D0  [L=261]
 Scores for complete sequence (score includes all domains):
@@ -4999,8 +5000,8 @@ Passed Vit filter:                        49  (0.00333107); expected 14.7 (0.001
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.92u 0.66s 00:00:01.58 Elapsed: 00:00:00.92
-# Mc/sec: 1885.02
+# CPU time: 0.34u 0.26s 00:00:00.60 Elapsed: 00:00:00.77
+# Mc/sec: 2252.23
 //
 Query:       GLOVI|Gene=BAC90721|UniProtKB=Q7NGV7  [L=231]
 Scores for complete sequence (score includes all domains):
@@ -5221,8 +5222,8 @@ Passed Vit filter:                        56  (0.00380693); expected 14.7 (0.001
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.85u 0.63s 00:00:01.48 Elapsed: 00:00:00.90
-# Mc/sec: 1705.43
+# CPU time: 0.32u 0.25s 00:00:00.57 Elapsed: 00:00:00.75
+# Mc/sec: 2046.51
 //
 Query:       CHLRE|EnsemblGenome=CHLREDRAFT_196269|UniProtKB=A8HYJ4  [L=260]
 Scores for complete sequence (score includes all domains):
@@ -5612,8 +5613,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                        18  (0.00122366); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              18  [number of targets reported over threshold]
-# CPU time: 0.87u 0.62s 00:00:01.49 Elapsed: 00:00:00.89
-# Mc/sec: 1941.09
+# CPU time: 0.33u 0.25s 00:00:00.58 Elapsed: 00:00:00.72
+# Mc/sec: 2399.41
 //
 Query:       ECOLI|EcoGene=EG13327|UniProtKB=P75792  [L=253]
 Scores for complete sequence (score includes all domains):
@@ -5816,8 +5817,8 @@ Passed Vit filter:                        53  (0.00360299); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.90u 0.67s 00:00:01.57 Elapsed: 00:00:00.93
-# Mc/sec: 1807.59
+# CPU time: 0.34u 0.27s 00:00:00.61 Elapsed: 00:00:00.96
+# Mc/sec: 1751.11
 //
 Query:       STRR6|EnsemblGenome=spr1811|UniProtKB=Q8DNC5  [L=254]
 Scores for complete sequence (score includes all domains):
@@ -6131,8 +6132,8 @@ Passed Vit filter:                        44  (0.00299116); expected 14.7 (0.001
 Passed Fwd filter:                        17  (0.00115568); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              17  [number of targets reported over threshold]
-# CPU time: 0.93u 0.75s 00:00:01.68 Elapsed: 00:00:00.95
-# Mc/sec: 1776.53
+# CPU time: 0.37u 0.28s 00:00:00.65 Elapsed: 00:00:00.92
+# Mc/sec: 1834.46
 //
 Query:       VIBCH|EnsemblGenome=VC_0134|UniProtKB=Q9KVK8  [L=261]
 Scores for complete sequence (score includes all domains):
@@ -6267,8 +6268,8 @@ Passed Vit filter:                        38  (0.00258328); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.89u 0.67s 00:00:01.56 Elapsed: 00:00:00.92
-# Mc/sec: 1885.02
+# CPU time: 0.35u 0.29s 00:00:00.63 Elapsed: 00:00:00.85
+# Mc/sec: 2040.26
 //
 Query:       VIBCH|EnsemblGenome=VC_1364|UniProtKB=Q9KS95  [L=253]
 Scores for complete sequence (score includes all domains):
@@ -6604,8 +6605,8 @@ Passed Vit filter:                        72  (0.00489463); expected 14.7 (0.001
 Passed Fwd filter:                        16  (0.0010877); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              16  [number of targets reported over threshold]
-# CPU time: 1.01u 0.80s 00:00:01.81 Elapsed: 00:00:00.96
-# Mc/sec: 1751.11
+# CPU time: 0.40u 0.27s 00:00:00.67 Elapsed: 00:00:00.88
+# Mc/sec: 1910.30
 //
 Query:       BACCR|EnsemblGenome=BC_2060|UniProtKB=Q81EC2  [L=245]
 Scores for complete sequence (score includes all domains):
@@ -6931,8 +6932,8 @@ Passed Vit filter:                        80  (0.00543848); expected 14.7 (0.001
 Passed Fwd filter:                        19  (0.00129164); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              19  [number of targets reported over threshold]
-# CPU time: 1.17u 0.88s 00:00:02.04 Elapsed: 00:00:01.03
-# Mc/sec: 1580.49
+# CPU time: 0.47u 0.31s 00:00:00.78 Elapsed: 00:00:01.05
+# Mc/sec: 1550.39
 //
 Query:       BACTN|EnsemblGenome=BT_3352|UniProtKB=Q8A2F3  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -7301,8 +7302,8 @@ Passed Vit filter:                        42  (0.0028552); expected 14.7 (0.001)
 Passed Fwd filter:                        18  (0.00122366); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              18  [number of targets reported over threshold]
-# CPU time: 0.89u 0.66s 00:00:01.55 Elapsed: 00:00:00.91
-# Mc/sec: 1883.83
+# CPU time: 0.34u 0.23s 00:00:00.57 Elapsed: 00:00:00.68
+# Mc/sec: 2521.01
 //
 Query:       PLAF7|EnsemblGenome=PFL1260w|UniProtKB=Q8I5F6  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -7398,8 +7399,8 @@ Passed Vit filter:                        27  (0.00183549); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.82u 0.65s 00:00:01.47 Elapsed: 00:00:00.90
-# Mc/sec: 1897.38
+# CPU time: 0.30u 0.26s 00:00:00.56 Elapsed: 00:00:00.72
+# Mc/sec: 2371.72
 //
 Query:       BACCR|EnsemblGenome=BC_3975|UniProtKB=Q819K1  [L=243]
 Scores for complete sequence (score includes all domains):
@@ -7809,8 +7810,8 @@ Passed Vit filter:                        54  (0.00367097); expected 14.7 (0.001
 Passed Fwd filter:                        19  (0.00129164); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              19  [number of targets reported over threshold]
-# CPU time: 0.90u 0.71s 00:00:01.61 Elapsed: 00:00:00.92
-# Mc/sec: 1755.02
+# CPU time: 0.35u 0.25s 00:00:00.60 Elapsed: 00:00:00.74
+# Mc/sec: 2181.91
 //
 Query:       BACSU|EnsemblGenome=BSU04040|UniProtKB=P42962  [L=240]
 Scores for complete sequence (score includes all domains):
@@ -8164,8 +8165,8 @@ Passed Vit filter:                        50  (0.00339905); expected 14.7 (0.001
 Passed Fwd filter:                        19  (0.00129164); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              19  [number of targets reported over threshold]
-# CPU time: 0.97u 0.77s 00:00:01.74 Elapsed: 00:00:00.95
-# Mc/sec: 1678.61
+# CPU time: 0.40u 0.27s 00:00:00.67 Elapsed: 00:00:00.86
+# Mc/sec: 1854.28
 //
 Query:       PLAF7|EnsemblGenome=PF10_0325|UniProtKB=Q8IJ74  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -8322,8 +8323,8 @@ Passed Vit filter:                        40  (0.00271924); expected 14.7 (0.001
 Passed Fwd filter:                         6  (0.000407886); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               6  [number of targets reported over threshold]
-# CPU time: 0.89u 0.68s 00:00:01.57 Elapsed: 00:00:00.91
-# Mc/sec: 1883.83
+# CPU time: 0.33u 0.27s 00:00:00.60 Elapsed: 00:00:00.80
+# Mc/sec: 2142.86
 //
 Query:       ORYSJ|Gene=Os02g0227000|UniProtKB=Q6H5Z1  [L=219]
 Scores for complete sequence (score includes all domains):
@@ -8392,8 +8393,8 @@ Passed Vit filter:                        32  (0.00217539); expected 14.7 (0.001
 Passed Fwd filter:                         3  (0.000203943); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               3  [number of targets reported over threshold]
-# CPU time: 0.80u 0.56s 00:00:01.36 Elapsed: 00:00:00.88
-# Mc/sec: 1653.58
+# CPU time: 0.26u 0.22s 00:00:00.48 Elapsed: 00:00:00.56
+# Mc/sec: 2598.48
 //
 Query:       POPTR|EnsemblGenome=POPTR_0018s04850|UniProtKB=B9INH6  [L=264]
 Scores for complete sequence (score includes all domains):
@@ -8736,8 +8737,8 @@ Passed Vit filter:                        51  (0.00346703); expected 14.7 (0.001
 Passed Fwd filter:                        16  (0.0010877); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              16  [number of targets reported over threshold]
-# CPU time: 0.91u 0.67s 00:00:01.58 Elapsed: 00:00:00.92
-# Mc/sec: 1906.69
+# CPU time: 0.35u 0.22s 00:00:00.56 Elapsed: 00:00:00.66
+# Mc/sec: 2657.81
 //
 Query:       LEIMA|EnsemblGenome=LmjF.28.1350|UniProtKB=Q4Q8D1  [L=261]
 Scores for complete sequence (score includes all domains):
@@ -8826,8 +8827,8 @@ Passed Vit filter:                        28  (0.00190347); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.84u 0.60s 00:00:01.44 Elapsed: 00:00:00.88
-# Mc/sec: 1970.70
+# CPU time: 0.28u 0.23s 00:00:00.51 Elapsed: 00:00:00.63
+# Mc/sec: 2752.73
 //
 Query:       CLOBH|Gene_OrderedLocusName=CBO3330|UniProtKB=A5I755  [L=253]
 Scores for complete sequence (score includes all domains):
@@ -9022,8 +9023,8 @@ Passed Vit filter:                        47  (0.00319511); expected 14.7 (0.001
 Passed Fwd filter:                        10  (0.00067981); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              10  [number of targets reported over threshold]
-# CPU time: 0.89u 0.71s 00:00:01.60 Elapsed: 00:00:00.92
-# Mc/sec: 1827.24
+# CPU time: 0.34u 0.26s 00:00:00.60 Elapsed: 00:00:00.76
+# Mc/sec: 2211.92
 //
 Query:       ECOLI|EcoGene=EG13216|UniProtKB=P46891  [L=254]
 Scores for complete sequence (score includes all domains):
@@ -9179,8 +9180,8 @@ Passed Vit filter:                        41  (0.00278722); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.82u 0.65s 00:00:01.47 Elapsed: 00:00:00.91
-# Mc/sec: 1854.62
+# CPU time: 0.30u 0.22s 00:00:00.52 Elapsed: 00:00:00.63
+# Mc/sec: 2678.90
 //
 Query:       BACCR|EnsemblGenome=BC_0886|UniProtKB=Q81HC9  [L=254]
 Scores for complete sequence (score includes all domains):
@@ -9413,8 +9414,8 @@ Passed Vit filter:                        62  (0.00421482); expected 14.7 (0.001
 Passed Fwd filter:                        14  (0.000951734); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              14  [number of targets reported over threshold]
-# CPU time: 0.94u 0.71s 00:00:01.65 Elapsed: 00:00:00.93
-# Mc/sec: 1814.74
+# CPU time: 0.34u 0.27s 00:00:00.61 Elapsed: 00:00:00.80
+# Mc/sec: 2109.63
 //
 Query:       STAA8|EnsemblGenome=SAOUHSC_01323|UniProtKB=Q2FYV1  [L=255]
 Scores for complete sequence (score includes all domains):
@@ -9643,8 +9644,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.89u 0.71s 00:00:01.60 Elapsed: 00:00:00.93
-# Mc/sec: 1821.88
+# CPU time: 0.35u 0.25s 00:00:00.60 Elapsed: 00:00:00.72
+# Mc/sec: 2353.27
 //
 Query:       CLOBH|Gene_OrderedLocusName=CBO2599|UniProtKB=A5I530  [L=250]
 Scores for complete sequence (score includes all domains):
@@ -9852,8 +9853,8 @@ Passed Vit filter:                        58  (0.0039429); expected 14.7 (0.001)
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.93u 0.73s 00:00:01.66 Elapsed: 00:00:00.93
-# Mc/sec: 1786.16
+# CPU time: 0.36u 0.24s 00:00:00.60 Elapsed: 00:00:00.73
+# Mc/sec: 2275.52
 //
 Query:       STRCO|Gene=CAA22222|UniProtKB=Q9ZBY2  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -9976,8 +9977,8 @@ Passed Vit filter:                        34  (0.00231135); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.81u 0.61s 00:00:01.42 Elapsed: 00:00:00.88
-# Mc/sec: 1932.95
+# CPU time: 0.28u 0.23s 00:00:00.51 Elapsed: 00:00:00.59
+# Mc/sec: 2883.04
 //
 Query:       SALTY|EnsemblGenome=STM1986|UniProtKB=P65417  [L=218]
 Scores for complete sequence (score includes all domains):
@@ -10086,8 +10087,8 @@ Passed Vit filter:                        36  (0.00244731); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.80u 0.57s 00:00:01.37 Elapsed: 00:00:00.87
-# Mc/sec: 1664.95
+# CPU time: 0.28u 0.21s 00:00:00.49 Elapsed: 00:00:00.55
+# Mc/sec: 2633.64
 //
 Query:       SALTY|EnsemblGenome=STM3962|UniProtKB=Q9L6N4  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -10262,8 +10263,8 @@ Passed Vit filter:                        33  (0.00224337); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.84u 0.62s 00:00:01.46 Elapsed: 00:00:00.89
-# Mc/sec: 1926.16
+# CPU time: 0.32u 0.23s 00:00:00.55 Elapsed: 00:00:00.63
+# Mc/sec: 2721.09
 //
 Query:       STAA8|EnsemblGenome=SAOUHSC_00542|UniProtKB=Q2G0L8  [L=245]
 Scores for complete sequence (score includes all domains):
@@ -10438,8 +10439,8 @@ Passed Vit filter:                        44  (0.00299116); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.90u 0.72s 00:00:01.62 Elapsed: 00:00:00.92
-# Mc/sec: 1769.46
+# CPU time: 0.33u 0.24s 00:00:00.57 Elapsed: 00:00:00.67
+# Mc/sec: 2429.71
 //
 Query:       LEIMA|EnsemblGenome=LmjF.28.1370|UniProtKB=Q4Q8C9  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -10622,8 +10623,8 @@ Passed Vit filter:                        44  (0.00299116); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.88u 0.62s 00:00:01.50 Elapsed: 00:00:00.89
-# Mc/sec: 1933.63
+# CPU time: 0.31u 0.23s 00:00:00.54 Elapsed: 00:00:00.62
+# Mc/sec: 2775.69
 //
 Query:       THEMA|EnsemblGenome=TM_0651|UniProtKB=Q9WZB9  [L=252]
 Scores for complete sequence (score includes all domains):
@@ -10857,8 +10858,8 @@ Passed Vit filter:                        65  (0.00441876); expected 14.7 (0.001
 Passed Fwd filter:                        13  (0.000883753); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              13  [number of targets reported over threshold]
-# CPU time: 0.94u 0.78s 00:00:01.72 Elapsed: 00:00:00.96
-# Mc/sec: 1744.18
+# CPU time: 0.38u 0.27s 00:00:00.65 Elapsed: 00:00:00.78
+# Mc/sec: 2146.69
 //
 Query:       ARATH|TAIR=AT2G25870|UniProtKB=Q8L5Z4  [L=263]
 Scores for complete sequence (score includes all domains):
@@ -11208,8 +11209,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                        16  (0.0010877); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              16  [number of targets reported over threshold]
-# CPU time: 0.92u 0.72s 00:00:01.64 Elapsed: 00:00:00.93
-# Mc/sec: 1879.04
+# CPU time: 0.37u 0.25s 00:00:00.62 Elapsed: 00:00:00.70
+# Mc/sec: 2496.44
 //
 Query:       BACCR|EnsemblGenome=BC_4052|UniProtKB=Q819D3  [L=252]
 Scores for complete sequence (score includes all domains):
@@ -11357,8 +11358,8 @@ Passed Vit filter:                        38  (0.00258328); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.95u 0.74s 00:00:01.69 Elapsed: 00:00:00.95
-# Mc/sec: 1762.54
+# CPU time: 0.35u 0.26s 00:00:00.61 Elapsed: 00:00:00.75
+# Mc/sec: 2232.56
 //
 Query:       BACCR|EnsemblGenome=BC_0246|UniProtKB=Q81IV0  [L=240]
 Scores for complete sequence (score includes all domains):
@@ -11659,8 +11660,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                        16  (0.0010877); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              16  [number of targets reported over threshold]
-# CPU time: 0.96u 0.78s 00:00:01.74 Elapsed: 00:00:00.96
-# Mc/sec: 1661.13
+# CPU time: 0.37u 0.24s 00:00:00.61 Elapsed: 00:00:00.73
+# Mc/sec: 2184.50
 //
 Query:       ECOLI|EcoGene=EG11195|UniProtKB=P0A8Y5  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -11921,8 +11922,8 @@ Passed Vit filter:                        55  (0.00373895); expected 14.7 (0.001
 Passed Fwd filter:                        14  (0.000951734); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              14  [number of targets reported over threshold]
-# CPU time: 0.93u 0.68s 00:00:01.61 Elapsed: 00:00:00.93
-# Mc/sec: 1850.46
+# CPU time: 0.36u 0.24s 00:00:00.60 Elapsed: 00:00:00.69
+# Mc/sec: 2494.10
 //
 Query:       SULSO|EnsemblGenome=SSO2157|UniProtKB=P95931  [L=210]
 Scores for complete sequence (score includes all domains):
@@ -11998,8 +11999,8 @@ Passed Vit filter:                        44  (0.00299116); expected 14.7 (0.001
 Passed Fwd filter:                         3  (0.000203943); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               3  [number of targets reported over threshold]
-# CPU time: 0.84u 0.68s 00:00:01.52 Elapsed: 00:00:00.92
-# Mc/sec: 1516.68
+# CPU time: 0.28u 0.22s 00:00:00.50 Elapsed: 00:00:00.59
+# Mc/sec: 2365.00
 //
 Query:       BACSU|EnsemblGenome=BSU09830|UniProtKB=O07539  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -12207,8 +12208,8 @@ Passed Vit filter:                        52  (0.00353501); expected 14.7 (0.001
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.96u 0.70s 00:00:01.66 Elapsed: 00:00:00.94
-# Mc/sec: 1816.64
+# CPU time: 0.35u 0.24s 00:00:00.59 Elapsed: 00:00:00.70
+# Mc/sec: 2439.49
 //
 Query:       PYRAE|EnsemblGenome=PAE3495|UniProtKB=Q8ZT04  [L=215]
 Scores for complete sequence (score includes all domains):
@@ -12391,8 +12392,8 @@ Passed Vit filter:                        49  (0.00333107); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.81u 0.56s 00:00:01.37 Elapsed: 00:00:00.87
-# Mc/sec: 1642.04
+# CPU time: 0.28u 0.21s 00:00:00.49 Elapsed: 00:00:00.55
+# Mc/sec: 2597.40
 //
 Query:       VIBCH|EnsemblGenome=VC_A0243|UniProtKB=Q9KMS7  [L=254]
 Scores for complete sequence (score includes all domains):
@@ -12627,8 +12628,8 @@ Passed Vit filter:                        42  (0.0028552); expected 14.7 (0.001)
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.88u 0.65s 00:00:01.53 Elapsed: 00:00:00.91
-# Mc/sec: 1854.62
+# CPU time: 0.32u 0.23s 00:00:00.55 Elapsed: 00:00:00.64
+# Mc/sec: 2637.04
 //
 Query:       LEIMA|EnsemblGenome=LmjF.28.1380|UniProtKB=Q4Q8C8  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -12790,8 +12791,8 @@ Passed Vit filter:                        41  (0.00278722); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.88u 0.73s 00:00:01.61 Elapsed: 00:00:00.95
-# Mc/sec: 1811.50
+# CPU time: 0.33u 0.23s 00:00:00.56 Elapsed: 00:00:00.64
+# Mc/sec: 2688.95
 //
 Query:       LEIMA|EnsemblGenome=LmjF.28.1340|UniProtKB=Q4Q8D2  [L=131]
 Scores for complete sequence (score includes all domains):
@@ -12839,8 +12840,8 @@ Passed Vit filter:                        39  (0.00265126); expected 14.7 (0.001
 Passed Fwd filter:                         2  (0.000135962); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               2  [number of targets reported over threshold]
-# CPU time: 0.75u 0.61s 00:00:01.36 Elapsed: 00:00:00.86
-# Mc/sec: 1012.13
+# CPU time: 0.23u 0.23s 00:00:00.46 Elapsed: 00:00:00.56
+# Mc/sec: 1554.34
 //
 Query:       SALTY|EnsemblGenome=STM0457|UniProtKB=Q8ZRB6  [L=254]
 Scores for complete sequence (score includes all domains):
@@ -12942,8 +12943,8 @@ Passed Vit filter:                        38  (0.00258328); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.82u 0.65s 00:00:01.47 Elapsed: 00:00:00.88
-# Mc/sec: 1917.85
+# CPU time: 0.30u 0.21s 00:00:00.51 Elapsed: 00:00:00.56
+# Mc/sec: 2960.89
 //
 Query:       DICDI|dictyBase=DDB_G0277745|UniProtKB=Q86KT5  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -13147,8 +13148,8 @@ Passed Vit filter:                        38  (0.00258328); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.88u 0.63s 00:00:01.51 Elapsed: 00:00:00.90
-# Mc/sec: 1912.14
+# CPU time: 0.36u 0.26s 00:00:00.62 Elapsed: 00:00:00.71
+# Mc/sec: 2423.84
 //
 Query:       BACSU|EnsemblGenome=BSU35850|UniProtKB=P96741  [L=246]
 Scores for complete sequence (score includes all domains):
@@ -13323,8 +13324,8 @@ Passed Vit filter:                        53  (0.00360299); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.92u 0.78s 00:00:01.70 Elapsed: 00:00:00.95
-# Mc/sec: 1720.58
+# CPU time: 0.36u 0.25s 00:00:00.61 Elapsed: 00:00:00.69
+# Mc/sec: 2368.91
 //
 Query:       SALTY|EnsemblGenome=STM0784|UniProtKB=Q8ZQR5  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -13585,8 +13586,8 @@ Passed Vit filter:                        54  (0.00367097); expected 14.7 (0.001
 Passed Fwd filter:                        14  (0.000951734); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              14  [number of targets reported over threshold]
-# CPU time: 0.92u 0.62s 00:00:01.54 Elapsed: 00:00:00.94
-# Mc/sec: 1816.64
+# CPU time: 0.33u 0.22s 00:00:00.55 Elapsed: 00:00:00.63
+# Mc/sec: 2710.54
 //
 Query:       STRR6|EnsemblGenome=spr0263|UniProtKB=Q8DR95  [L=253]
 Scores for complete sequence (score includes all domains):
@@ -13735,8 +13736,8 @@ Passed Vit filter:                        49  (0.00333107); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.85u 0.68s 00:00:01.53 Elapsed: 00:00:00.90
-# Mc/sec: 1867.85
+# CPU time: 0.32u 0.23s 00:00:00.55 Elapsed: 00:00:00.61
+# Mc/sec: 2755.84
 //
 Query:       METAC|EnsemblGenome=MA_3544|UniProtKB=Q8TK72  [L=217]
 Scores for complete sequence (score includes all domains):
@@ -13965,8 +13966,8 @@ Passed Vit filter:                        34  (0.00231135); expected 14.7 (0.001
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.81u 0.61s 00:00:01.42 Elapsed: 00:00:00.89
-# Mc/sec: 1620.07
+# CPU time: 0.31u 0.23s 00:00:00.54 Elapsed: 00:00:00.61
+# Mc/sec: 2363.70
 //
 Query:       DICPU|Gene=DICPUDRAFT_76364|UniProtKB=F0ZDE0  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -14209,8 +14210,8 @@ Passed Vit filter:                        52  (0.00353501); expected 14.7 (0.001
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.91u 0.73s 00:00:01.64 Elapsed: 00:00:00.93
-# Mc/sec: 1850.46
+# CPU time: 0.35u 0.24s 00:00:00.59 Elapsed: 00:00:00.67
+# Mc/sec: 2568.55
 //
 Query:       SALTY|EnsemblGenome=STM0867|UniProtKB=Q8ZQK7  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -14359,8 +14360,8 @@ Passed Vit filter:                        47  (0.00319511); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.91u 0.78s 00:00:01.69 Elapsed: 00:00:00.97
-# Mc/sec: 1767.30
+# CPU time: 0.34u 0.25s 00:00:00.59 Elapsed: 00:00:00.69
+# Mc/sec: 2484.47
 //
 Query:       TRYB2|Gene=Tb11.01.0120|UniProtKB=Q384H5  [L=260]
 Scores for complete sequence (score includes all domains):
@@ -14557,8 +14558,8 @@ Passed Vit filter:                        45  (0.00305914); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.90u 0.69s 00:00:01.59 Elapsed: 00:00:00.92
-# Mc/sec: 1877.80
+# CPU time: 0.33u 0.23s 00:00:00.56 Elapsed: 00:00:00.63
+# Mc/sec: 2742.18
 //
 Query:       ENTHI|EnsemblGenome=EHI_168190|UniProtKB=C4M4Q5  [L=206]
 Scores for complete sequence (score includes all domains):
@@ -14712,8 +14713,8 @@ Passed Vit filter:                        81  (0.00550646); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.98u 0.78s 00:00:01.76 Elapsed: 00:00:00.97
-# Mc/sec: 1411.10
+# CPU time: 0.33u 0.22s 00:00:00.55 Elapsed: 00:00:00.59
+# Mc/sec: 2319.95
 //
 Query:       BACCR|EnsemblGenome=BC_5396|UniProtKB=Q814N0  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -15008,8 +15009,8 @@ Passed Vit filter:                        75  (0.00509857); expected 14.7 (0.001
 Passed Fwd filter:                        15  (0.00101971); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              15  [number of targets reported over threshold]
-# CPU time: 1.05u 0.79s 00:00:01.84 Elapsed: 00:00:00.97
-# Mc/sec: 1753.60
+# CPU time: 0.41u 0.25s 00:00:00.65 Elapsed: 00:00:00.80
+# Mc/sec: 2126.24
 //
 Query:       ECOLI|EcoGene=EG13678|UniProtKB=P75809  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -15157,8 +15158,8 @@ Passed Vit filter:                        53  (0.00360299); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.88u 0.69s 00:00:01.56 Elapsed: 00:00:00.91
-# Mc/sec: 1883.83
+# CPU time: 0.34u 0.25s 00:00:00.59 Elapsed: 00:00:00.85
+# Mc/sec: 2016.81
 //
 Query:       ORYSJ|EnsemblGenome=OS09G0388400|UniProtKB=Q6H5D1  [L=264]
 Scores for complete sequence (score includes all domains):
@@ -15486,8 +15487,8 @@ Passed Vit filter:                        53  (0.00360299); expected 14.7 (0.001
 Passed Fwd filter:                        17  (0.00115568); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              17  [number of targets reported over threshold]
-# CPU time: 0.89u 0.64s 00:00:01.53 Elapsed: 00:00:00.91
-# Mc/sec: 1927.64
+# CPU time: 0.35u 0.22s 00:00:00.56 Elapsed: 00:00:00.72
+# Mc/sec: 2436.32
 //
 Query:       BACCR|EnsemblGenome=BC_1165|UniProtKB=Q81GM7  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -15596,8 +15597,8 @@ Passed Vit filter:                        37  (0.0025153); expected 14.7 (0.001)
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.83u 0.69s 00:00:01.52 Elapsed: 00:00:00.90
-# Mc/sec: 1890.00
+# CPU time: 0.30u 0.21s 00:00:00.51 Elapsed: 00:00:00.56
+# Mc/sec: 2984.20
 //
 Query:       STAA8|EnsemblGenome=SAOUHSC_01375|UniProtKB=Q2FYR0  [L=244]
 Scores for complete sequence (score includes all domains):
@@ -15679,8 +15680,8 @@ Passed Vit filter:                        47  (0.00319511); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.82u 0.66s 00:00:01.48 Elapsed: 00:00:00.88
-# Mc/sec: 1842.34
+# CPU time: 0.31u 0.24s 00:00:00.55 Elapsed: 00:00:00.59
+# Mc/sec: 2747.90
 //
 Query:       SALTY|EnsemblGenome=STM0840|UniProtKB=Q8ZQM8  [L=222]
 Scores for complete sequence (score includes all domains):
@@ -15794,8 +15795,8 @@ Passed Vit filter:                        29  (0.00197145); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.78u 0.63s 00:00:01.41 Elapsed: 00:00:00.89
-# Mc/sec: 1657.40
+# CPU time: 0.31u 0.23s 00:00:00.54 Elapsed: 00:00:00.57
+# Mc/sec: 2543.25
 //
 Query:       BACSU|EnsemblGenome=BSU36290|UniProtKB=P94592  [L=240]
 Scores for complete sequence (score includes all domains):
@@ -16029,8 +16030,8 @@ Passed Vit filter:                        42  (0.0028552); expected 14.7 (0.001)
 Passed Fwd filter:                        13  (0.000883753); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              13  [number of targets reported over threshold]
-# CPU time: 0.96u 0.68s 00:00:01.64 Elapsed: 00:00:00.95
-# Mc/sec: 1678.61
+# CPU time: 0.36u 0.24s 00:00:00.60 Elapsed: 00:00:00.69
+# Mc/sec: 2311.14
 //
 Query:       SOYBN|EnsemblGenome=GLYMA17G26630|UniProtKB=K7MML4  [L=165]
 Scores for complete sequence (score includes all domains):
@@ -16186,8 +16187,8 @@ Passed Vit filter:                        50  (0.00339905); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.81u 0.65s 00:00:01.46 Elapsed: 00:00:00.90
-# Mc/sec: 1218.16
+# CPU time: 0.26u 0.22s 00:00:00.48 Elapsed: 00:00:00.54
+# Mc/sec: 2030.27
 //
 Query:       BACSU|EnsemblGenome=BSU11140|UniProtKB=P70947  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -16275,8 +16276,8 @@ Passed Vit filter:                        55  (0.00373895); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.89u 0.69s 00:00:01.58 Elapsed: 00:00:00.90
-# Mc/sec: 1897.38
+# CPU time: 0.33u 0.23s 00:00:00.56 Elapsed: 00:00:00.62
+# Mc/sec: 2754.26
 //
 Query:       SOYBN|EnsemblGenome=GLYMA14G21790|UniProtKB=I1M9Z5  [L=264]
 Scores for complete sequence (score includes all domains):
@@ -16631,8 +16632,8 @@ Passed Vit filter:                        50  (0.00339905); expected 14.7 (0.001
 Passed Fwd filter:                        18  (0.00122366); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              18  [number of targets reported over threshold]
-# CPU time: 0.98u 0.70s 00:00:01.68 Elapsed: 00:00:00.96
-# Mc/sec: 1827.24
+# CPU time: 0.36u 0.21s 00:00:00.56 Elapsed: 00:00:00.59
+# Mc/sec: 2973.14
 //
 Query:       STRR6|EnsemblGenome=spr0824|UniProtKB=Q8DQ66  [L=251]
 Scores for complete sequence (score includes all domains):
@@ -16846,8 +16847,8 @@ Passed Vit filter:                        51  (0.00346703); expected 14.7 (0.001
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.89u 0.73s 00:00:01.62 Elapsed: 00:00:00.93
-# Mc/sec: 1793.30
+# CPU time: 0.34u 0.22s 00:00:00.56 Elapsed: 00:00:00.60
+# Mc/sec: 2779.62
 //
 Query:       BACTN|EnsemblGenome=BT_1666|UniProtKB=Q8A759  [L=247]
 Scores for complete sequence (score includes all domains):
@@ -17168,8 +17169,8 @@ Passed Vit filter:                        62  (0.00421482); expected 14.7 (0.001
 Passed Fwd filter:                        17  (0.00115568); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              17  [number of targets reported over threshold]
-# CPU time: 0.93u 0.68s 00:00:01.61 Elapsed: 00:00:00.92
-# Mc/sec: 1783.91
+# CPU time: 0.33u 0.20s 00:00:00.53 Elapsed: 00:00:00.56
+# Mc/sec: 2930.71
 //
 Query:       THAPS|Gene=Thaps23626|UniProtKB=B5YNW5  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -17445,8 +17446,8 @@ Passed Vit filter:                        44  (0.00299116); expected 14.7 (0.001
 Passed Fwd filter:                        13  (0.000883753); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              13  [number of targets reported over threshold]
-# CPU time: 0.92u 0.67s 00:00:01.59 Elapsed: 00:00:00.91
-# Mc/sec: 1876.53
+# CPU time: 0.32u 0.21s 00:00:00.53 Elapsed: 00:00:00.59
+# Mc/sec: 2894.31
 //
 Query:       SALTY|EnsemblGenome=STM4010|UniProtKB=Q8ZKU5  [L=233]
 Scores for complete sequence (score includes all domains):
@@ -17760,8 +17761,8 @@ Passed Vit filter:                        52  (0.00353501); expected 14.7 (0.001
 Passed Fwd filter:                        17  (0.00115568); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              17  [number of targets reported over threshold]
-# CPU time: 0.96u 0.74s 00:00:01.70 Elapsed: 00:00:00.96
-# Mc/sec: 1612.68
+# CPU time: 0.35u 0.22s 00:00:00.56 Elapsed: 00:00:00.63
+# Mc/sec: 2457.42
 //
 Query:       PHYPA|Gene=PHYPADRAFT_9889|UniProtKB=A9U6X7  [L=80]
 Scores for complete sequence (score includes all domains):
@@ -17875,8 +17876,8 @@ Passed Vit filter:                        38  (0.00258328); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.68u 0.63s 00:00:01.31 Elapsed: 00:00:00.87
-# Mc/sec: 610.99
+# CPU time: 0.22u 0.21s 00:00:00.43 Elapsed: 00:00:00.48
+# Mc/sec: 1107.42
 //
 Query:       YERPE|EnsemblGenome=ACX52_2125|UniProtKB=Q0WAI1  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -17992,8 +17993,8 @@ Passed Vit filter:                        31  (0.00210741); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.88u 0.67s 00:00:01.55 Elapsed: 00:00:00.92
-# Mc/sec: 1856.13
+# CPU time: 0.29u 0.21s 00:00:00.50 Elapsed: 00:00:00.54
+# Mc/sec: 3162.30
 //
 Query:       FUSNN|EnsemblGenome=FN0391|UniProtKB=Q8RGB4  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -18209,8 +18210,8 @@ Passed Vit filter:                        54  (0.00367097); expected 14.7 (0.001
 Passed Fwd filter:                        10  (0.00067981); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              10  [number of targets reported over threshold]
-# CPU time: 0.95u 0.75s 00:00:01.70 Elapsed: 00:00:00.95
-# Mc/sec: 1811.50
+# CPU time: 0.38u 0.24s 00:00:00.62 Elapsed: 00:00:00.69
+# Mc/sec: 2494.10
 //
 Query:       HAEIN|EnsemblGenome=HI_0597|UniProtKB=P44771  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -18339,8 +18340,8 @@ Passed Vit filter:                        40  (0.00271924); expected 14.7 (0.001
 Passed Fwd filter:                         6  (0.000407886); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               6  [number of targets reported over threshold]
-# CPU time: 0.85u 0.64s 00:00:01.49 Elapsed: 00:00:00.90
-# Mc/sec: 1890.00
+# CPU time: 0.33u 0.24s 00:00:00.57 Elapsed: 00:00:00.64
+# Mc/sec: 2657.81
 //
 Query:       PHYPA|Gene=PHYPADRAFT_77716|UniProtKB=A9SD07  [L=250]
 Scores for complete sequence (score includes all domains):
@@ -18574,8 +18575,8 @@ Passed Vit filter:                        42  (0.0028552); expected 14.7 (0.001)
 Passed Fwd filter:                        13  (0.000883753); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              13  [number of targets reported over threshold]
-# CPU time: 0.92u 0.68s 00:00:01.60 Elapsed: 00:00:00.93
-# Mc/sec: 1786.16
+# CPU time: 0.35u 0.21s 00:00:00.55 Elapsed: 00:00:00.60
+# Mc/sec: 2768.55
 //
 Query:       DEIRA|EnsemblGenome=DR_1329|UniProtKB=Q9RUQ3  [L=245]
 Scores for complete sequence (score includes all domains):
@@ -18811,8 +18812,8 @@ Passed Vit filter:                        36  (0.00244731); expected 14.7 (0.001
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.85u 0.62s 00:00:01.47 Elapsed: 00:00:00.91
-# Mc/sec: 1788.91
+# CPU time: 0.30u 0.20s 00:00:00.50 Elapsed: 00:00:00.56
+# Mc/sec: 2906.97
 //
 Query:       CLOBH|Gene=CBO1615|UniProtKB=A5I286  [L=239]
 Scores for complete sequence (score includes all domains):
@@ -18913,8 +18914,8 @@ Passed Vit filter:                        39  (0.00265126); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.84u 0.62s 00:00:01.46 Elapsed: 00:00:00.89
-# Mc/sec: 1784.31
+# CPU time: 0.29u 0.21s 00:00:00.50 Elapsed: 00:00:00.52
+# Mc/sec: 3053.92
 //
 Query:       SALTY|EnsemblGenome=STM3831|UniProtKB=Q8ZKY8  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -19189,8 +19190,8 @@ Passed Vit filter:                        59  (0.00401088); expected 14.7 (0.001
 Passed Fwd filter:                        14  (0.000951734); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              14  [number of targets reported over threshold]
-# CPU time: 0.89u 0.69s 00:00:01.58 Elapsed: 00:00:00.92
-# Mc/sec: 1870.58
+# CPU time: 0.34u 0.21s 00:00:00.55 Elapsed: 00:00:00.56
+# Mc/sec: 3019.17
 //
 Query:       THAPS|Gene=Thaps9499|UniProtKB=B8CBH8  [L=263]
 Scores for complete sequence (score includes all domains):
@@ -19410,8 +19411,8 @@ Passed Vit filter:                        43  (0.00292318); expected 14.7 (0.001
 Passed Fwd filter:                        13  (0.000883753); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              13  [number of targets reported over threshold]
-# CPU time: 0.89u 0.65s 00:00:01.54 Elapsed: 00:00:00.90
-# Mc/sec: 1941.67
+# CPU time: 0.34u 0.23s 00:00:00.57 Elapsed: 00:00:00.65
+# Mc/sec: 2688.47
 //
 Query:       MYCTU|EnsemblGenome=LH57_20785|UniProtKB=O07810  [L=240]
 Scores for complete sequence (score includes all domains):
@@ -19566,8 +19567,8 @@ Passed Vit filter:                        30  (0.00203943); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.79u 0.56s 00:00:01.35 Elapsed: 00:00:00.86
-# Mc/sec: 1854.28
+# CPU time: 0.29u 0.21s 00:00:00.50 Elapsed: 00:00:00.53
+# Mc/sec: 3008.84
 //
 Query:       BACTN|EnsemblGenome=BT_4699|UniProtKB=Q89YN2  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -19901,8 +19902,8 @@ Passed Vit filter:                        40  (0.00271924); expected 14.7 (0.001
 Passed Fwd filter:                        18  (0.00122366); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              18  [number of targets reported over threshold]
-# CPU time: 0.91u 0.65s 00:00:01.56 Elapsed: 00:00:00.90
-# Mc/sec: 1912.14
+# CPU time: 0.35u 0.24s 00:00:00.59 Elapsed: 00:00:00.70
+# Mc/sec: 2458.47
 //
 Query:       HALSA|EnsemblGenome=VNG_0718C|UniProtKB=Q9HRF9  [L=216]
 Scores for complete sequence (score includes all domains):
@@ -20018,8 +20019,8 @@ Passed Vit filter:                        33  (0.00224337); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.74u 0.55s 00:00:01.29 Elapsed: 00:00:00.86
-# Mc/sec: 1668.85
+# CPU time: 0.27u 0.20s 00:00:00.47 Elapsed: 00:00:00.48
+# Mc/sec: 2990.03
 //
 Query:       BRADI|EnsemblGenome=BRADI2G49310|UniProtKB=I1HRC4  [L=264]
 Scores for complete sequence (score includes all domains):
@@ -20374,8 +20375,8 @@ Passed Vit filter:                        49  (0.00333107); expected 14.7 (0.001
 Passed Fwd filter:                        18  (0.00122366); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              18  [number of targets reported over threshold]
-# CPU time: 0.91u 0.69s 00:00:01.60 Elapsed: 00:00:00.93
-# Mc/sec: 1886.18
+# CPU time: 0.36u 0.21s 00:00:00.56 Elapsed: 00:00:00.59
+# Mc/sec: 2973.14
 //
 Query:       GLOVI|Gene=BAC88774|UniProtKB=Q7NMD3  [L=259]
 Scores for complete sequence (score includes all domains):
@@ -20744,8 +20745,8 @@ Passed Vit filter:                        50  (0.00339905); expected 14.7 (0.001
 Passed Fwd filter:                        18  (0.00122366); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              18  [number of targets reported over threshold]
-# CPU time: 0.90u 0.62s 00:00:01.52 Elapsed: 00:00:00.91
-# Mc/sec: 1891.13
+# CPU time: 0.34u 0.23s 00:00:00.57 Elapsed: 00:00:00.64
+# Mc/sec: 2688.95
 //
 Query:       THEKO|EnsemblGenome=TK2301|UniProtKB=Q5JDB7  [L=223]
 Scores for complete sequence (score includes all domains):
@@ -20947,8 +20948,8 @@ Passed Vit filter:                        38  (0.00258328); expected 14.7 (0.001
 Passed Fwd filter:                        10  (0.00067981); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              10  [number of targets reported over threshold]
-# CPU time: 0.80u 0.62s 00:00:01.42 Elapsed: 00:00:00.88
-# Mc/sec: 1683.78
+# CPU time: 0.30u 0.22s 00:00:00.52 Elapsed: 00:00:00.56
+# Mc/sec: 2599.52
 //
 Query:       HAEIN|EnsemblGenome=HI_0003|UniProtKB=P44447  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -21016,8 +21017,8 @@ Passed Vit filter:                        44  (0.00299116); expected 14.7 (0.001
 Passed Fwd filter:                         3  (0.000203943); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               3  [number of targets reported over threshold]
-# CPU time: 0.81u 0.65s 00:00:01.46 Elapsed: 00:00:00.90
-# Mc/sec: 1890.00
+# CPU time: 0.29u 0.21s 00:00:00.50 Elapsed: 00:00:00.55
+# Mc/sec: 3092.72
 //
 Query:       YERPE|EnsemblGenome=ACX52_3977|UniProtKB=Q0W9U3  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -21252,8 +21253,8 @@ Passed Vit filter:                        53  (0.00360299); expected 14.7 (0.001
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.87u 0.65s 00:00:01.52 Elapsed: 00:00:00.90
-# Mc/sec: 1904.76
+# CPU time: 0.38u 0.26s 00:00:00.64 Elapsed: 00:00:00.70
+# Mc/sec: 2448.98
 //
 Query:       BRADU|Gene=BAC52028|UniProtKB=Q89FD8  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -21422,8 +21423,8 @@ Passed Vit filter:                        30  (0.00203943); expected 14.7 (0.001
 Passed Fwd filter:                         8  (0.000543848); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               8  [number of targets reported over threshold]
-# CPU time: 0.84u 0.62s 00:00:01.46 Elapsed: 00:00:00.89
-# Mc/sec: 1911.23
+# CPU time: 0.29u 0.21s 00:00:00.50 Elapsed: 00:00:00.54
+# Mc/sec: 3149.99
 //
 Query:       STRR6|EnsemblGenome=spr1124|UniProtKB=Q8DPK1  [L=260]
 Scores for complete sequence (score includes all domains):
@@ -21698,8 +21699,8 @@ Passed Vit filter:                        58  (0.0039429); expected 14.7 (0.001)
 Passed Fwd filter:                        14  (0.000951734); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              14  [number of targets reported over threshold]
-# CPU time: 1.00u 0.73s 00:00:01.73 Elapsed: 00:00:00.97
-# Mc/sec: 1781.00
+# CPU time: 0.37u 0.22s 00:00:00.59 Elapsed: 00:00:00.62
+# Mc/sec: 2786.41
 //
 Query:       STRR6|EnsemblGenome=spr1170|UniProtKB=Q8DPG8  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -21962,8 +21963,8 @@ Passed Vit filter:                        61  (0.00414684); expected 14.7 (0.001
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.91u 0.67s 00:00:01.58 Elapsed: 00:00:00.91
-# Mc/sec: 1883.83
+# CPU time: 0.32u 0.21s 00:00:00.53 Elapsed: 00:00:00.57
+# Mc/sec: 2955.66
 //
 Query:       BACSU|EnsemblGenome=BSU39550|UniProtKB=P54947  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -22259,8 +22260,8 @@ Passed Vit filter:                        56  (0.00380693); expected 14.7 (0.001
 Passed Fwd filter:                        14  (0.000951734); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              14  [number of targets reported over threshold]
-# CPU time: 0.89u 0.68s 00:00:01.57 Elapsed: 00:00:00.92
-# Mc/sec: 1856.13
+# CPU time: 0.34u 0.22s 00:00:00.56 Elapsed: 00:00:00.59
+# Mc/sec: 2894.31
 //
 Query:       BACSU|EnsemblGenome=BSU10540|UniProtKB=O07565  [L=240]
 Scores for complete sequence (score includes all domains):
@@ -22349,8 +22350,8 @@ Passed Vit filter:                        34  (0.00231135); expected 14.7 (0.001
 Passed Fwd filter:                         4  (0.000271924); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               4  [number of targets reported over threshold]
-# CPU time: 0.85u 0.61s 00:00:01.46 Elapsed: 00:00:00.90
-# Mc/sec: 1771.87
+# CPU time: 0.30u 0.24s 00:00:00.54 Elapsed: 00:00:00.62
+# Mc/sec: 2572.07
 //
 Query:       SCHPO|PomBase=SPAC25B8.12c|UniProtKB=Q9UTA6  [L=257]
 Scores for complete sequence (score includes all domains):
@@ -22478,8 +22479,8 @@ Passed Vit filter:                        48  (0.00326309); expected 14.7 (0.001
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.90u 0.81s 00:00:01.71 Elapsed: 00:00:00.97
-# Mc/sec: 1760.45
+# CPU time: 0.32u 0.21s 00:00:00.53 Elapsed: 00:00:00.56
+# Mc/sec: 3049.36
 //
 Query:       SOLLC|EnsemblGenome=Solyc08g066180.2|UniProtKB=K4CLJ5  [L=264]
 Scores for complete sequence (score includes all domains):
@@ -22928,8 +22929,8 @@ Passed Vit filter:                        60  (0.00407886); expected 14.7 (0.001
 Passed Fwd filter:                        22  (0.00149558); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              22  [number of targets reported over threshold]
-# CPU time: 0.92u 0.71s 00:00:01.63 Elapsed: 00:00:00.93
-# Mc/sec: 1886.18
+# CPU time: 0.36u 0.21s 00:00:00.56 Elapsed: 00:00:00.59
+# Mc/sec: 2973.14
 //
 Query:       DICTD|EnsemblGenome=Dtur_1231|UniProtKB=B8E309  [L=240]
 Scores for complete sequence (score includes all domains):
@@ -23058,8 +23059,8 @@ Passed Vit filter:                        37  (0.0025153); expected 14.7 (0.001)
 Passed Fwd filter:                         6  (0.000407886); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               6  [number of targets reported over threshold]
-# CPU time: 0.87u 0.76s 00:00:01.63 Elapsed: 00:00:00.96
-# Mc/sec: 1661.13
+# CPU time: 0.32u 0.22s 00:00:00.54 Elapsed: 00:00:00.56
+# Mc/sec: 2797.69
 //
 Query:       ENTHI|EnsemblGenome=EHI_151930|UniProtKB=C4LSN2  [L=255]
 Scores for complete sequence (score includes all domains):
@@ -23220,8 +23221,8 @@ Passed Vit filter:                        57  (0.00387492); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.91u 0.84s 00:00:01.75 Elapsed: 00:00:00.99
-# Mc/sec: 1711.47
+# CPU time: 0.32u 0.21s 00:00:00.53 Elapsed: 00:00:00.59
+# Mc/sec: 2871.78
 //
 Query:       STRR6|EnsemblGenome=spr1306|UniProtKB=Q8DP80  [L=251]
 Scores for complete sequence (score includes all domains):
@@ -23470,8 +23471,8 @@ Passed Vit filter:                        62  (0.00421482); expected 14.7 (0.001
 Passed Fwd filter:                        12  (0.000815772); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              12  [number of targets reported over threshold]
-# CPU time: 0.96u 0.74s 00:00:01.70 Elapsed: 00:00:00.95
-# Mc/sec: 1755.55
+# CPU time: 0.34u 0.21s 00:00:00.55 Elapsed: 00:00:00.57
+# Mc/sec: 2875.47
 //
 Query:       PLAF7|EnsemblGenome=PFL1270w|UniProtKB=Q8I5F4  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -23599,8 +23600,8 @@ Passed Vit filter:                        42  (0.0028552); expected 14.7 (0.001)
 Passed Fwd filter:                         7  (0.000475867); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 0.87u 0.65s 00:00:01.52 Elapsed: 00:00:00.90
-# Mc/sec: 1904.76
+# CPU time: 0.31u 0.21s 00:00:00.52 Elapsed: 00:00:00.54
+# Mc/sec: 3174.60
 //
 Query:       YERPE|EnsemblGenome=YP_0783|UniProtKB=Q7CK25  [L=256]
 Scores for complete sequence (score includes all domains):
@@ -23702,8 +23703,8 @@ Passed Vit filter:                        30  (0.00203943); expected 14.7 (0.001
 Passed Fwd filter:                         5  (0.000339905); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               5  [number of targets reported over threshold]
-# CPU time: 0.81u 0.61s 00:00:01.42 Elapsed: 00:00:00.88
-# Mc/sec: 1932.95
+# CPU time: 0.29u 0.21s 00:00:00.50 Elapsed: 00:00:00.53
+# Mc/sec: 3209.43
 //
 Query:       SALTY|EnsemblGenome=STM0842|UniProtKB=Q7CQV6  [L=253]
 Scores for complete sequence (score includes all domains):
@@ -23899,8 +23900,8 @@ Passed Vit filter:                        40  (0.00271924); expected 14.7 (0.001
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.89u 0.66s 00:00:01.55 Elapsed: 00:00:00.91
-# Mc/sec: 1847.32
+# CPU time: 0.31u 0.20s 00:00:00.51 Elapsed: 00:00:00.52
+# Mc/sec: 3232.81
 //
 Query:       ECOLI|EcoGene=EG11470|UniProtKB=P27848  [L=258]
 Scores for complete sequence (score includes all domains):
@@ -24075,8 +24076,8 @@ Passed Vit filter:                        37  (0.0025153); expected 14.7 (0.001)
 Passed Fwd filter:                         9  (0.000611829); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               9  [number of targets reported over threshold]
-# CPU time: 0.88u 0.66s 00:00:01.54 Elapsed: 00:00:00.93
-# Mc/sec: 1843.32
+# CPU time: 0.30u 0.20s 00:00:00.50 Elapsed: 00:00:00.52
+# Mc/sec: 3296.70
 //
 Query:       ECOLI|EcoGene=EG11239|UniProtKB=P21829  [L=255]
 Scores for complete sequence (score includes all domains):
@@ -24371,8 +24372,8 @@ Passed Vit filter:                        51  (0.00346703); expected 14.7 (0.001
 Passed Fwd filter:                        15  (0.00101971); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              15  [number of targets reported over threshold]
-# CPU time: 0.92u 0.68s 00:00:01.60 Elapsed: 00:00:00.92
-# Mc/sec: 1841.69
+# CPU time: 0.33u 0.21s 00:00:00.54 Elapsed: 00:00:00.56
+# Mc/sec: 2972.55
 //
 Query:       YERPE|EnsemblGenome=ACX52_1107|UniProtKB=Q7CH63  [L=246]
 Scores for complete sequence (score includes all domains):
@@ -24713,8 +24714,8 @@ Passed Vit filter:                        50  (0.00339905); expected 14.7 (0.001
 Passed Fwd filter:                        18  (0.00122366); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              18  [number of targets reported over threshold]
-# CPU time: 1.02u 0.76s 00:00:01.78 Elapsed: 00:00:00.99
-# Mc/sec: 1651.06
+# CPU time: 0.37u 0.21s 00:00:00.57 Elapsed: 00:00:00.63
+# Mc/sec: 2594.52
 //
 Query:       BACCR|EnsemblGenome=BC_2618|UniProtKB=Q81CX3  [L=238]
 Scores for complete sequence (score includes all domains):
@@ -25009,8 +25010,8 @@ Passed Vit filter:                        49  (0.00333107); expected 14.7 (0.001
 Passed Fwd filter:                        15  (0.00101971); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              15  [number of targets reported over threshold]
-# CPU time: 0.95u 0.71s 00:00:01.66 Elapsed: 00:00:00.94
-# Mc/sec: 1682.33
+# CPU time: 0.35u 0.21s 00:00:00.55 Elapsed: 00:00:00.60
+# Mc/sec: 2635.66
 //
 Query:       ENTHI|EnsemblGenome=EHI_149870|UniProtKB=C4M9D2  [L=243]
 Scores for complete sequence (score includes all domains):
@@ -25218,8 +25219,8 @@ Passed Vit filter:                        59  (0.00401088); expected 14.7 (0.001
 Passed Fwd filter:                        11  (0.000747791); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              11  [number of targets reported over threshold]
-# CPU time: 0.94u 0.77s 00:00:01.71 Elapsed: 00:00:00.96
-# Mc/sec: 1681.89
+# CPU time: 0.34u 0.22s 00:00:00.56 Elapsed: 00:00:00.60
+# Mc/sec: 2691.03
 //
 Query:       BRADI|EnsemblGenome=BRADI3G08610|UniProtKB=I1HYX9  [L=208]
 Scores for complete sequence (score includes all domains):
@@ -25254,8 +25255,8 @@ Passed Vit filter:                        26  (0.00176751); expected 14.7 (0.001
 Passed Fwd filter:                         1  (6.7981e-05); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):               1  [number of targets reported over threshold]
-# CPU time: 0.85u 0.73s 00:00:01.58 Elapsed: 00:00:00.93
-# Mc/sec: 1486.08
+# CPU time: 0.27u 0.22s 00:00:00.49 Elapsed: 00:00:00.52
+# Mc/sec: 2657.81
 //
 Query:       BACTN|EnsemblGenome=BT_4131|UniProtKB=Q8A090  [L=250]
 Scores for complete sequence (score includes all domains):
@@ -25609,7 +25610,7 @@ Passed Vit filter:                        60  (0.00407886); expected 14.7 (0.001
 Passed Fwd filter:                        19  (0.00129164); expected 0.1 (1e-05)
 Initial search space (Z):              14710  [actual number of targets]
 Domain search space  (domZ):              19  [number of targets reported over threshold]
-# CPU time: 0.95u 0.69s 00:00:01.64 Elapsed: 00:00:00.93
-# Mc/sec: 1786.16
+# CPU time: 0.35u 0.21s 00:00:00.55 Elapsed: 00:00:00.60
+# Mc/sec: 2768.55
 //
 [ok]

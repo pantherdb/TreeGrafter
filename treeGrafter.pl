@@ -61,6 +61,10 @@ graftMatches($options, $matches, $allResults);
 #Now print out the results.
 printResults($options, $allResults);
 
+if(!$options->{keep}){
+  rmdir($options->{directory}."/tmp");
+}
+
 exit;
 #--------------------------------------------------------------------------------------
 
@@ -93,7 +97,10 @@ sub processOptions {
     die "Your directory, $directory, does not exisit.\n";
   }
   $options->{directory} = $directory;
-
+  if(!-d "$directory/tmp"){
+    mkdir("$directory/tmp");
+  }
+  
   #We expect this directory to have a certain structure
   #TODO:Deal with different releases, hardcoded to 12.0
   my $pantherhmm = "$directory/PANTHER12_famhmm/PANTHER12.0_all_fam.hmm";
@@ -433,7 +440,7 @@ sub _generateFasta {
   my @parts = $querymsf =~ /(.{1,80})/g;
   $queryid =~ s/[^\w]/\_/g;
   my $queryfasta = $options->{directory}."/tmp/$queryid.$matchpthr.fasta";
-  open OUT,"> $queryfasta" or die "cannot open $queryfasta\n";
+  open OUT,"> $queryfasta" or die "cannot open $queryfasta:[$!]\n";
   print OUT ">query_$queryid\n";
   foreach my $line (@parts){
     print OUT "$line\n";
