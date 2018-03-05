@@ -100,21 +100,27 @@ Go to https://github.com/haimingt/TreeGrafting
 
 # Examples:
 1. using the Test data, automatically choose hmmscan or hmmsearch:
-% cd treeGrafting-master
-% perl treeGrafter.pl -f .Test/sample.fasta -o .Test/sample.1.out -d ./Test/PANTHER_mini -auto
+
+cd treeGrafting-master
+perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.1.out -d ./Test/PANTHER_mini -auto
 
 2. using the prevously stored hmmscan output
+
 IMPORTANT! provide -algo hmmscan for hmmscan.out; -algo hmmsearch for hmmsearch.out
-% perl treeGrafter.pl -f .Test/sample.fasta -o .Test/sample.2.out -d ./Test/PANTHER_mini -algo hmmscan -hmmer ./Test/sample.fasta.hmmscan.out
+
+perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.2.out -d ./Test/PANTHER_mini -algo hmmscan -hmmer ./Test/sample.fasta.hmmscan.out
 
 3. using hmmsearch algo
-perl treeGrafter.pl -f .Test/sample.fasta -o .Test/sample.3.out -d ./Test/PANTHER_mini -algo hmmsearch
+
+perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.3.out -d ./Test/PANTHER_mini -algo hmmsearch
 
 4. using the full dataset treeGrafter1.01_supplemental
-perl treeGrafter.pl -f .Test/sample.fasta -o .Test/sample.4.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
+
+perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.4.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
 
 5. using the executable on mac
-treeGrafter.osx -f .Test/sample.fasta -o .Test/sample.5.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
+
+treeGrafter.osx -f ./Test/sample.fasta -o ./Test/sample.5.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
 
 The input file must be a list of sequences in fasta format
 
