@@ -59,9 +59,13 @@ HMMER 3.1b2  available at http://hmmer.org/download.html
 Perl
 
 Perl modules: 
+
      Bio::TreeIO  available at http://search.cpan.org/CPAN/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
+     
      Try::Tiny  http://search.cpan.org/~ether/Try-Tiny-0.28/lib/Try/Tiny.pm
+     
      JSON::Parse http://search.cpan.org/~bkb/JSON-Parse-0.49/lib/JSON/Parse.pod
+     
      IO::String http://search.cpan.org/~gaas/IO-String-1.08/String.pm
 
 
