@@ -1,5 +1,4 @@
-# TreeGrafter is a new software tool for annotating uncharacterized protein sequences,
- using annotated phylogenetic trees.
+# TreeGrafter: a new software tool for annotating uncharacterized protein sequences using annotated phylogenetic trees.
  
 Copyright (C) 2017 Paul Thomas
 This file may be copied and redistributed freely, without advance permission,
