@@ -144,8 +144,8 @@ Sample output info:
 
 sample.ouput
 
-STRCO_Gene_CAB44512_UniProtKB_Q9XAS3	PTHR10000	SF:PTHR10000:SF8;NAME:Sugar phosphatase YidA; GO-Annotation:GO:0016311;GO:0016791;GO:0005737;
-STRR6_EnsemblGenome_spr1125_UniProtKB_Q8DPK0		PTHR10000		    SF:PTHR10000:SF27;NAME:5-amino-6-(5-phospho-D-ribitylamino)uracil phosphatase YbjI;GO-Annotation:GO:0016311;GO:0016791;GO:0005737;
+STRCO_Gene_CAB44512_UniProtKB_Q9XAS3	PTHR10000	SF:PTHR10000:SF8;NAME:Sugar phosphatase YidA; GO-Annotations:GO:0016311;GO:0016791;GO:0005737;
+STRR6_EnsemblGenome_spr1125_UniProtKB_Q8DPK0		PTHR10000		    SF:PTHR10000:SF27;NAME:5-amino-6-(5-phospho-D-ribitylamino)uracil phosphatase YbjI;GO-Annotations:GO:0016311;GO:0016791;GO:0005737;
 
 
 Output format, separated by tab:  
