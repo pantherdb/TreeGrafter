@@ -84,9 +84,13 @@ Install Cygwin from https://cygwin.com/install.html, install “Perl” and “m
 2.	Open Cygwin and verify Perl installation with command: % perl -v. 
 3.	Install Cpanminus http://search.cpan.org/~miyagawa/App-cpanminus-1.7040/lib/App/cpanminus.pm#Installing_to_system_perl. Cpanminus could be installed using command cpan App::cpanmius
 4.	Install required modules: Try::Tiny, BioPerl, JSON::Parse, IO::String, using commands below:
+
   % cpanm Try::Tiny 
+  
   % cpanm Bio::Perl 
+  
   %	cpanm JSON::Parse 
+  
   %	cpanm IO::String 
 
 The location to  Perl and Perl modules must be defined in your $PATH variable.  If you have
