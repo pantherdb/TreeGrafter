@@ -77,6 +77,17 @@ that contain all of the dependencies.
 If you are using OSX, you can skip installing the Perl modules, and use the executable 
 directly.
 
+If you are using windows, you can use Cygwin to run the tool. You follow the additional steps below:
+
+1.	Install Cygwin and Perl
+Install Cygwin from https://cygwin.com/install.html, install “Perl” and “make” in “Select Packages” while running “setup.exe”. 
+2.	Open Cygwin and verify Perl installation with typing perl -v. 
+3.	Install Cpanminus http://search.cpan.org/~miyagawa/App-cpanminus-1.7040/lib/App/cpanminus.pm#Installing_to_system_perl. Cpanminus could be installed using command cpan App::cpanmius
+4.	Install required modules: Try::Tiny, BioPerl, JSON::Parse, IO::String, using commands below:
+  o	cpanm Try::Tiny 
+  o	cpanm Bio::Perl 
+  o	cpanm JSON::Parse 
+  o	cpanm IO::String 
 
 The location to  Perl and Perl modules must be defined in your $PATH variable.  If you have
  any questions on how to set up $PATH, please contact your UNIX system administrator.
