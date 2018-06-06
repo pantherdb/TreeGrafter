@@ -20,10 +20,10 @@ TreeGrafter is a new software tool for annotating uncharacterized protein sequen
  using annotated phylogenetic trees.
 
 The scripts are located in:
-https://github.com/haimingt/TreeGrafting
+https://github.com/haimingt/TreeGrafter
 
 The PANTHER data for this tool is located in:
-ftp://ftp.pantherdb.org/downloads/TreeMethod/
+ftp://ftp.pantherdb.org/downloads/TreeGrafter/
 
 2/28/2018
 
