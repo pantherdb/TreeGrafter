@@ -184,27 +184,19 @@ third column: predicted SF and GO annotations for the gene id
 Alternatively script can be run using Docker container
 
 
-Download the PANTHER data 
-```
-$ wget  ftp://ftp.pantherdb.org/downloads/TreeMethod/treeGrafter1.01_supplemental.tar.gz
-```
-
-Uncompress the PANTHER data
-```
-$ tar xvfz treeGrafter1.01_supplemental.tar.gz
-```
-
 Build docker container
 ```
 $ docker build -t treegrafter .
 ```
 
 Run container
+`-v /path/to/treeGrafter1.01_supplemental:/PANTHER_DB` replaced by the path to PANTHER data
 
-`-v /path/to/treeGrafter1.01_supplemental:/tmp` replaced by the path to PANTHER data
+`-v /path/to/output:/tmp` provide path to output
 
+EXAMPLE:
 ```
-$ docker run --rm --name treegrafter -v /path/to/treeGrafter1.01_supplemental:/tmp treegrafter -f ./Test/sample.fasta -o /tmp/sample.1.out -d /tmp -auto
+$ docker run --rm --name treegrafter -v /path/to/treeGrafter1.01_supplemental:/PANTHER_DB -v /path/to/output:/tmp treegrafter -f ./Test/sample.fasta -o /tmp/sample.1.out -d /PANTHER_DB -auto
 Reading HMM file
 hmm database size in memory: 265780560
 fasta file size in memory: 30118
@@ -218,8 +210,3 @@ Troubleshooting:
 If you have any problems, please contact us at: feedback@pantherdb.org
 
 *  *  *  *  * 
-
-
-
-
-
