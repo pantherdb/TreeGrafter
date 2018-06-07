@@ -13,11 +13,12 @@ WARRANTY OF ANY KIND WHATSOEVER, EXPRESS OR IMPLIED, INCLUDING IMPLIED
 WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. PAUL
 THOMAS MAKES NO WARRANTY THAT ITS DATA DOES NOT CONTAIN ERRORS.
 
-############################################################################
+*  *  *  *  * 
 
-TreeGrafter - Version 1.01
+# TreeGrafter - Version 1.01
+
 TreeGrafter is a new software tool for annotating uncharacterized protein sequences,
- using annotated phylogenetic trees.
+using annotated phylogenetic trees.
 
 The scripts are located in:
 https://github.com/haimingt/TreeGrafter
@@ -29,9 +30,9 @@ ftp://ftp.pantherdb.org/downloads/TreeGrafter/
 
 Software authors: Haiming Tang, Robert D Finn
 
-#############################################################################
+*  *  *  *  * 
 
-IMPORTANT!!
+## IMPORTANT!!
 If you need GO annotations (and/or PANTHER subfamily classifications) for protein sequences from organisms that are already in the PANTHER trees, you do not need to run this tool.  You can download the annotations directly from:
 ftp://ftp.pantherdb.org/sequence_classifications/current_release/
 
@@ -48,102 +49,109 @@ Example: "MONBE|Gene=28576|UniProtKB=A9V8K6"
 For a complete list of existing species in the current version of PANTHER:
 Check: http://pantherdb.org/panther/summaryStats.jsp
 
-##############################################################################
+*  *  *  *  * 
 
-##########
-Requirements:
+## Prerequisites:
 
-RAxML 8.2.4  available at https://github.com/stamatak/standard-RAxML	
-HMMER 3.1b2  available at http://hmmer.org/download.html
-
-Perl
-
-Perl modules: 
-
-     Bio::TreeIO  available at http://search.cpan.org/CPAN/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
-     
-     Try::Tiny  http://search.cpan.org/~ether/Try-Tiny-0.28/lib/Try/Tiny.pm
-     
-     JSON::Parse http://search.cpan.org/~bkb/JSON-Parse-0.49/lib/JSON/Parse.pod
-     
-     IO::String http://search.cpan.org/~gaas/IO-String-1.08/String.pm
-
+- RAxML 8.2.4  available at https://github.com/stamatak/standard-RAxML	
+- HMMER 3.1b2  available at http://hmmer.org/download.html
+- Perl
+- Perl modules: 
+  - Bio::TreeIO  available at http://search.cpan.org/CPAN/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
+  - Try::Tiny  http://search.cpan.org/~ether/Try-Tiny-0.28/lib/Try/Tiny.pm
+  - JSON::Parse http://search.cpan.org/~bkb/JSON-Parse-0.49/lib/JSON/Parse.pod
+  - IO::String http://search.cpan.org/~gaas/IO-String-1.08/String.pm
 
 When using Perl scripts it can be challenging to install all of the dependencies and there
 can be "drift" in functionality of the external Perl modules that this script was
 originally written for. To migate this, we have generate a standalone executable
 that contain all of the dependencies. 
 
+##### OS X
 If you are using OSX, you can skip installing the Perl modules, and use the executable 
 directly.
 
-If you are using windows, you can use Cygwin to run the tool. You follow the additional steps below:
+##### Windows
+If you are using Windows, you can use Cygwin to run the tool. You follow the additional steps below:
 
-1.	Install Cygwin and Perl
-Install Cygwin from https://cygwin.com/install.html, install “Perl” and “make” in “Select Packages” while running “setup.exe”. 
+1. Install Cygwin and Perl
+  - Install Cygwin from https://cygwin.com/install.html,
+  - Install “Perl” and “make” in “Select Packages” while running “setup.exe”. 
 2.	Open Cygwin and verify Perl installation with command: % perl -v. 
 3.	Install Cpanminus http://search.cpan.org/~miyagawa/App-cpanminus-1.7040/lib/App/cpanminus.pm#Installing_to_system_perl. Cpanminus could be installed using command cpan App::cpanmius
-4.	Install required modules: Try::Tiny, BioPerl, JSON::Parse, IO::String, using commands below:
-
-  % cpanm Try::Tiny 
-  
-  % cpanm Bio::Perl 
-  
-  %	cpanm JSON::Parse 
-  
-  %	cpanm IO::String 
-
-The location to  Perl and Perl modules must be defined in your $PATH variable.  If you have
- any questions on how to set up $PATH, please contact your UNIX system administrator.
+4.	Install required modules: `Try::Tiny`, `BioPerl`, `JSON::Parse`, `IO::String`, using commands below:
+    ```
+    % cpanm Try::Tiny 
+    % cpanm Bio::Perl 
+    % cpanm JSON::Parse 
+    % cpanm IO::String 
+    ```
+The location to  Perl and Perl modules must be defined in your `$PATH` variable.  If you have
+ any questions on how to set up `$PATH`, please contact your UNIX system administrator.
 
 The locations of RAxML and HMMER  are required as input for this tool if not defined in $PATH.
 
-##########
-Usage:
+## Usage:
 
 Download the PANTHER data 
+```
 % wget  ftp://ftp.pantherdb.org/downloads/TreeMethod/treeGrafter1.01_supplemental.tar.gz
+```
 
 Uncompress the PANTHER data
+```
 % tar xvfz treeGrafter1.01_supplemental.tar.gz
+```
 
 Download or clone the treeGrafter from github
 Go to https://github.com/haimingt/TreeGrafting
 
+```
 % cd treeGrafting-master
 % perl treeGrafter.pl -f <input fasta file> -o <output file> -d <directory path to treeGrafter1.01_supplemental> -r <optional: RAxML location> -algo <hmmsearch or hmmscan> -auto <Please specify either -algo <hmmscan|hmmsearch> or -auto, but not both> -k <keep temporary files: 1 for yes> -hmmer <for previously stored output of hmmscan or hmmsearch>
+```
 
-# Examples:
+## Examples:
 1. using the Test data, automatically choose hmmscan or hmmsearch:
-
-cd treeGrafting-master
-perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.1.out -d ./Test/PANTHER_mini -auto
+    ```
+    cd treeGrafting-master
+    perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.1.out -d ./Test/PANTHER_mini -auto
+    ```
 
 2. using the prevously stored hmmscan output
 
-IMPORTANT! provide -algo hmmscan for hmmscan.out; -algo hmmsearch for hmmsearch.out
+    **IMPORTANT!** provide -algo hmmscan for hmmscan.out; -algo hmmsearch for hmmsearch.out
 
-perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.2.out -d ./Test/PANTHER_mini -algo hmmscan -hmmer ./Test/sample.fasta.hmmscan.out
+    ```
+    perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.2.out -d ./Test/PANTHER_mini -algo hmmscan -hmmer ./Test/sample.fasta.hmmscan.out
+    ```
 
 3. using hmmsearch algo
 
-perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.3.out -d ./Test/PANTHER_mini -algo hmmsearch
+    ```
+    perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.3.out -d ./Test/PANTHER_mini -algo hmmsearch
+    ```
 
 4. using the full dataset treeGrafter1.01_supplemental
 
-perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.4.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
+    ```
+    perl treeGrafter.pl -f ./Test/sample.fasta -o ./Test/sample.4.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
+    ```
 
 5. using the executable on mac
 
-treeGrafter.osx -f ./Test/sample.fasta -o ./Test/sample.5.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
+    ```
+    treeGrafter.osx -f ./Test/sample.fasta -o ./Test/sample.5.out -d ./path/to/treeGrafter1.01_supplemental -algo hmmsearch
+    ```
 
 The input file must be a list of sequences in fasta format
 
-##########
-sample input fasta file:
+*  *  *  *  * 
+Sample input fasta file:
 
-sample.fasta
+`sample.fasta`
 
+```
 >STRCO|Gene=CAB44512|UniProtKB=Q9XAS3
 --DRTAYSLVATDLDGTLLRGDDTVSDRSLAALARVAGAGARHLVVTGRPAPRVRPLLDRLGCTGLAVCGQGAQVYDAGH
 RMLWSVTLDRELAETALGIEAEVGQVHAAVDQDGVTP-----DYLMPHPTAVRVERRAQLWS-TPISKVLLR-HPELTDD
@@ -154,27 +162,62 @@ KAVADEVTTTNEDDGVAVVLERIF--
 NELYNKSFNRQVFQQVVDLNMKQSIDQLVICGKH-TAF--KEDTRFYYHQLKEIDSLQQLPE-DDYVKIAFNIN-RETHP
 NVDEEVATQFSNDIKLVSSGHDSIDIIMPNMTKGQALKRLLDKWEMSPSELMAFGDANNDKDMLAFAKHSYVMENSHDEE
 LNIASAVAPSNDKQGVLTIIEQ----
+```
 
 Sample output info:
 
-sample.ouput
+`sample.ouput`
 
+```
 STRCO_Gene_CAB44512_UniProtKB_Q9XAS3	PTHR10000	SF:PTHR10000:SF8;NAME:Sugar phosphatase YidA; GO-Annotations:GO:0016311;GO:0016791;GO:0005737;
 STRR6_EnsemblGenome_spr1125_UniProtKB_Q8DPK0		PTHR10000		    SF:PTHR10000:SF27;NAME:5-amino-6-(5-phospho-D-ribitylamino)uracil phosphatase YbjI;GO-Annotations:GO:0016311;GO:0016791;GO:0005737;
-
+```
 
 Output format, separated by tab:  
 first column: gene id (non word characters replaced by '_');
 second column:  best-matched PANTHER family 
 third column: predicted SF and GO annotations for the gene id
 
-##########
+
+## Docker container
+
+Alternatively script can be run using Docker container
+
+
+Download the PANTHER data 
+```
+$ wget  ftp://ftp.pantherdb.org/downloads/TreeMethod/treeGrafter1.01_supplemental.tar.gz
+```
+
+Uncompress the PANTHER data
+```
+$ tar xvfz treeGrafter1.01_supplemental.tar.gz
+```
+
+Build docker container
+```
+$ docker build -t treegrafter .
+```
+
+Run container
+
+`-v /path/to/treeGrafter1.01_supplemental:/tmp` replaced by the path to PANTHER data
+
+```
+$ docker run --rm --name treegrafter -v /path/to/treeGrafter1.01_supplemental:/tmp treegrafter -f ./Test/sample.fasta -o /tmp/sample.1.out -d /tmp -auto
+Reading HMM file
+hmm database size in memory: 265780560
+fasta file size in memory: 30118
+Best algorithm is hmmscan
+```
+
+*  *  *  *  * 
 
 Troubleshooting:
 
 If you have any problems, please contact us at: feedback@pantherdb.org
 
-##########
+*  *  *  *  * 
 
 
 
