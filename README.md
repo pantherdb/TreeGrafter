@@ -40,11 +40,16 @@ You can also parse them from the annotation file distributed with TreeGrafter:
 PANTHER12_PAINT_Annotations/PANTHER12_leaf_GO_IBDannotations.tab (in ftp://ftp.pantherdb.org/downloads/TreeMethod/treeGrafter1.01_supplemental.tar.gz) 
 
 Description of the file format: separated by tab 
+
 First column: PANTHER gene label
+
 Second column:  SF and GO anntations
+
 Third column: PANTHER long gene id: 
-Format: uniprot_species_mnemonic|Various_Gene_Database=gene_id|UniprotKB=uniprotKB_id
-Example: "MONBE|Gene=28576|UniProtKB=A9V8K6"
+
+Format: `uniprot_species_mnemonic|Various_Gene_Database=gene_id|UniprotKB=uniprotKB_id`
+
+Example: `"MONBE|Gene=28576|UniProtKB=A9V8K6"`
 
 For a complete list of existing species in the current version of PANTHER:
 Check: http://pantherdb.org/panther/summaryStats.jsp
@@ -57,10 +62,10 @@ Check: http://pantherdb.org/panther/summaryStats.jsp
 - HMMER 3.1b2  available at http://hmmer.org/download.html
 - Perl
 - Perl modules: 
-  - Bio::TreeIO  available at http://search.cpan.org/CPAN/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
-  - Try::Tiny  http://search.cpan.org/~ether/Try-Tiny-0.28/lib/Try/Tiny.pm
-  - JSON::Parse http://search.cpan.org/~bkb/JSON-Parse-0.49/lib/JSON/Parse.pod
-  - IO::String http://search.cpan.org/~gaas/IO-String-1.08/String.pm
+  - `Bio::TreeIO` available at http://search.cpan.org/CPAN/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
+  - `Try::Tiny` available at http://search.cpan.org/~ether/Try-Tiny-0.28/lib/Try/Tiny.pm
+  - `JSON::Parse` available at http://search.cpan.org/~bkb/JSON-Parse-0.49/lib/JSON/Parse.pod
+  - `IO::String` available at http://search.cpan.org/~gaas/IO-String-1.08/String.pm
 
 When using Perl scripts it can be challenging to install all of the dependencies and there
 can be "drift" in functionality of the external Perl modules that this script was
