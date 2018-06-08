@@ -185,6 +185,9 @@ Alternatively script can be run using Docker container
 
 Latest Docker container is available in https://hub.docker.com/r/ningzhithm/treegrafter/
 
+Docker installation instructions for Windows, OSX and Linux platforms are available on https://docs.docker.com/install/.
+
+##### Run software in container
 
 Pull Docker container and run test
 ```
