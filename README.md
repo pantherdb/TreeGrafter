@@ -183,25 +183,53 @@ third column: predicted SF and GO annotations for the gene id
 
 Alternatively script can be run using Docker container
 
+Latest Docker container is available in https://hub.docker.com/r/ningzhithm/treegrafter/
 
-Build docker container
+
+Pull Docker container and run mounting Test folder as a volume
+
+`-v /path/to/TreeGrafter.git/Test:/tmp` replaced by the path to Test folder
+
 ```
-$ docker build -t treegrafter .
-```
-
-Run container
-`-v /path/to/treeGrafter1.01_supplemental:/PANTHER_DB` replaced by the path to PANTHER data
-
-`-v /path/to/output:/tmp` provide path to output
-
-EXAMPLE:
-```
-$ docker run --rm --name treegrafter -v /path/to/treeGrafter1.01_supplemental:/PANTHER_DB -v /path/to/output:/tmp treegrafter -f ./Test/sample.fasta -o /tmp/sample.1.out -d /PANTHER_DB -auto
+$ docker run --rm --name treegrafter -v /path/to/TreeGrafter.git/Test:/tmp  ningzhithm/treegrafter:1.01 -f ./Test/sample.fasta -o /tmp/sample.1.out -d /tmp/PANTHER_mini -auto
+Unable to find image 'ningzhithm/treegrafter:1.01' locally
+1.01: Pulling from ningzhithm/treegrafter
+cc1a78bfd46b: Already exists 
+d2c05365ee2a: Pull complete 
+231cb0e216d3: Pull complete 
+3d2aa70286b8: Pull complete 
+e80dfb6a4adf: Pull complete 
+d0b05f6cad70: Pull complete 
+2d2cd662bc46: Pull complete 
+6cfaf1c5a3ac: Pull complete 
+15fc59d44f95: Pull complete 
+765395a78139: Pull complete 
+27e5292b1937: Pull complete 
+b63a1923c3c0: Pull complete 
+268d0765615f: Pull complete 
+28f9ca7819ff: Pull complete 
+c4f4dd48c9e4: Pull complete 
+46c6672b0ab5: Pull complete 
+229f69bb16ad: Pull complete 
+64a809c054ca: Pull complete 
+6ec0ce3584d7: Pull complete 
+5cf5741bea6d: Pull complete 
+eb44c517d033: Pull complete 
+442b151cd5d0: Pull complete 
+e7c68b3b30cf: Pull complete 
+4a7312bbc726: Pull complete 
+2476efc68f5b: Pull complete 
+fa7417f5079f: Pull complete 
+d42bd620ebf8: Pull complete 
+1b11a5c09de7: Pull complete 
+Digest: sha256:85fb4be0512140c50838155f70a8ba3fdcc7556e0c1e9cd519cdc5ac0e382610
+Status: Downloaded newer image for ningzhithm/treegrafter:1.01
 Reading HMM file
-hmm database size in memory: 265780560
-fasta file size in memory: 30118
-Best algorithm is hmmscan
+hmm database size in memory: 10640
+fasta file size in memory: 10816
+Best algorithm is hmmsearch
 ```
+
 
 *  *  *  *  * 
 
