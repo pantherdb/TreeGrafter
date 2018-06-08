@@ -186,12 +186,9 @@ Alternatively script can be run using Docker container
 Latest Docker container is available in https://hub.docker.com/r/ningzhithm/treegrafter/
 
 
-Pull Docker container and run mounting Test folder as a volume
-
-`-v /path/to/TreeGrafter.git/Test:/tmp` replaced by the path to Test folder
-
+Pull Docker container and run test
 ```
-$ docker run --rm --name treegrafter -v /path/to/TreeGrafter.git/Test:/tmp  ningzhithm/treegrafter:1.01 -f ./Test/sample.fasta -o /tmp/sample.1.out -d /tmp/PANTHER_mini -auto
+$ docker run --rm --name treegrafter -v /path/to/output:/output ningzhithm/treegrafter:1.01 -f ./Test/sample.fasta -o /output/sample.1.out -d ./Test/PANTHER_mini -auto
 Unable to find image 'ningzhithm/treegrafter:1.01' locally
 1.01: Pulling from ningzhithm/treegrafter
 cc1a78bfd46b: Already exists 
@@ -228,6 +225,13 @@ Reading HMM file
 hmm database size in memory: 10640
 fasta file size in memory: 10816
 Best algorithm is hmmsearch
+```
+
+PANTHER DB can be mounted as a data volume using
+`-v /path/to/treeGrafter1.01_supplemental:/opt/supplemental`
+
+```
+$ docker run --rm --name treegrafter -v /path/to/sample:/sample -v /path/to/output:/output -v /path/to/treeGrafter1.01_supplemental:/opt/supplemental ningzhithm/treegrafter:1.01 -f /sample/sample.fasta -o /output/sample.1.out -d /opt/supplemental -auto
 ```
 
 
