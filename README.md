@@ -40,11 +40,16 @@ You can also parse them from the annotation file distributed with TreeGrafter:
 PANTHER12_PAINT_Annotations/PANTHER12_leaf_GO_IBDannotations.tab (in ftp://ftp.pantherdb.org/downloads/TreeMethod/treeGrafter1.01_supplemental.tar.gz) 
 
 Description of the file format: separated by tab 
+
 First column: PANTHER gene label
+
 Second column:  SF and GO anntations
+
 Third column: PANTHER long gene id: 
-Format: uniprot_species_mnemonic|Various_Gene_Database=gene_id|UniprotKB=uniprotKB_id
-Example: "MONBE|Gene=28576|UniProtKB=A9V8K6"
+
+Format: `uniprot_species_mnemonic|Various_Gene_Database=gene_id|UniprotKB=uniprotKB_id`
+
+Example: `"MONBE|Gene=28576|UniProtKB=A9V8K6"`
 
 For a complete list of existing species in the current version of PANTHER:
 Check: http://pantherdb.org/panther/summaryStats.jsp
@@ -57,10 +62,10 @@ Check: http://pantherdb.org/panther/summaryStats.jsp
 - HMMER 3.1b2  available at http://hmmer.org/download.html
 - Perl
 - Perl modules: 
-  - Bio::TreeIO  available at http://search.cpan.org/CPAN/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
-  - Try::Tiny  http://search.cpan.org/~ether/Try-Tiny-0.28/lib/Try/Tiny.pm
-  - JSON::Parse http://search.cpan.org/~bkb/JSON-Parse-0.49/lib/JSON/Parse.pod
-  - IO::String http://search.cpan.org/~gaas/IO-String-1.08/String.pm
+  - `Bio::TreeIO` available at http://search.cpan.org/CPAN/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
+  - `Try::Tiny` available at http://search.cpan.org/~ether/Try-Tiny-0.28/lib/Try/Tiny.pm
+  - `JSON::Parse` available at http://search.cpan.org/~bkb/JSON-Parse-0.49/lib/JSON/Parse.pod
+  - `IO::String` available at http://search.cpan.org/~gaas/IO-String-1.08/String.pm
 
 When using Perl scripts it can be challenging to install all of the dependencies and there
 can be "drift" in functionality of the external Perl modules that this script was
@@ -183,25 +188,60 @@ third column: predicted SF and GO annotations for the gene id
 
 Alternatively script can be run using Docker container
 
+Latest Docker container is available in https://hub.docker.com/r/ningzhithm/treegrafter/
 
-Build docker container
+Docker installation instructions for Windows, OSX and Linux platforms are available on https://docs.docker.com/install/.
+
+##### Run software in container
+
+Pull Docker container and run test
 ```
-$ docker build -t treegrafter .
-```
-
-Run container
-`-v /path/to/treeGrafter1.01_supplemental:/PANTHER_DB` replaced by the path to PANTHER data
-
-`-v /path/to/output:/tmp` provide path to output
-
-EXAMPLE:
-```
-$ docker run --rm --name treegrafter -v /path/to/treeGrafter1.01_supplemental:/PANTHER_DB -v /path/to/output:/tmp treegrafter -f ./Test/sample.fasta -o /tmp/sample.1.out -d /PANTHER_DB -auto
+$ docker run --rm --name treegrafter -v /path/to/output:/output ningzhithm/treegrafter:1.01 -f ./Test/sample.fasta -o /output/sample.1.out -d ./Test/PANTHER_mini -auto
+Unable to find image 'ningzhithm/treegrafter:1.01' locally
+1.01: Pulling from ningzhithm/treegrafter
+cc1a78bfd46b: Already exists 
+d2c05365ee2a: Pull complete 
+231cb0e216d3: Pull complete 
+3d2aa70286b8: Pull complete 
+e80dfb6a4adf: Pull complete 
+d0b05f6cad70: Pull complete 
+2d2cd662bc46: Pull complete 
+6cfaf1c5a3ac: Pull complete 
+15fc59d44f95: Pull complete 
+765395a78139: Pull complete 
+27e5292b1937: Pull complete 
+b63a1923c3c0: Pull complete 
+268d0765615f: Pull complete 
+28f9ca7819ff: Pull complete 
+c4f4dd48c9e4: Pull complete 
+46c6672b0ab5: Pull complete 
+229f69bb16ad: Pull complete 
+64a809c054ca: Pull complete 
+6ec0ce3584d7: Pull complete 
+5cf5741bea6d: Pull complete 
+eb44c517d033: Pull complete 
+442b151cd5d0: Pull complete 
+e7c68b3b30cf: Pull complete 
+4a7312bbc726: Pull complete 
+2476efc68f5b: Pull complete 
+fa7417f5079f: Pull complete 
+d42bd620ebf8: Pull complete 
+1b11a5c09de7: Pull complete 
+Digest: sha256:85fb4be0512140c50838155f70a8ba3fdcc7556e0c1e9cd519cdc5ac0e382610
+Status: Downloaded newer image for ningzhithm/treegrafter:1.01
 Reading HMM file
-hmm database size in memory: 265780560
-fasta file size in memory: 30118
-Best algorithm is hmmscan
+hmm database size in memory: 10640
+fasta file size in memory: 10816
+Best algorithm is hmmsearch
 ```
+
+PANTHER DB can be mounted as a data volume using
+`-v /path/to/treeGrafter1.01_supplemental:/opt/supplemental`
+
+```
+$ docker run --rm --name treegrafter -v /path/to/sample:/sample -v /path/to/output:/output -v /path/to/treeGrafter1.01_supplemental:/opt/supplemental ningzhithm/treegrafter:1.01 -f /sample/sample.fasta -o /output/sample.1.out -d /opt/supplemental -auto
+```
+
 
 *  *  *  *  * 
 
