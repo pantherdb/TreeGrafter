@@ -228,6 +228,6 @@ third column: predicted SF and GO annotations for the gene id
 
 ## Troubleshooting:
 
-If you have any problems, please contact us at: feedback@pantherdb.org
+If you have any problems, please contact us at: pantherfeedback@yahoo.com
 
 *  *  *  *  * 
