@@ -6,13 +6,16 @@ my $lib;
 &GetOptions
 (
     "l=s" => \$log,         # -l for (l)ib path (ie ./PANTHER_7.0)
+    "s=s" => \$source_dir,  # -s for (s)ource path of Panther release files
+    "d=s" => \$dest_dir,    # -d for (d)estination path of where to save output
 );
 
 my $processor = shift;
 
-# my $dir = "/home/pmd-02/pdt/pdthomas/panther/famlib/rel/PANTHER13.1/books/";
-my $dir = "/home/pmd-02/pdt/pdthomas/panther/famlib/rel/PANTHER13.1";
-my $tar = "/home/pmd-02/pdt/pdthomas/panther/debert/TreeGrafter/resources/PANTHER13.1_data/Tree_MSF";
+# my $dir = "/home/pmd-02/pdt/pdthomas/panther/famlib/rel/PANTHER13.1";
+# my $tar = "/home/pmd-02/pdt/pdthomas/panther/debert/TreeGrafter/resources/PANTHER13.1_data/Tree_MSF";
+my $dir = $source_dir;
+my $tar = $dest_dir;
 
 opendir (DH,$dir) or die "cannot open $dir";
 my @files= readdir(DH);
