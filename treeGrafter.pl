@@ -103,7 +103,8 @@ sub processOptions {
   
   #We expect this directory to have a certain structure
   #TODO:Deal with different releases, hardcoded to 12.0
-  my $pantherhmm = "$directory/PANTHER12_famhmm/PANTHER12.0_all_fam.hmm";
+  # my $pantherhmm = "$directory/PANTHER12_famhmm/PANTHER12.0_all_fam.hmm";
+  my $pantherhmm = "$directory/famhmm/binHmm";
   if(!-e $pantherhmm){
     die "The PANTHER hmm file, $pantherhmm, does not exist.\n";
   }elsif( !-s $pantherhmm){
@@ -111,14 +112,16 @@ sub processOptions {
   }
   $options->{pantherhmm} = $pantherhmm;
   #Check that the directory containing the PANTHER alignments is present.
-  my $pantherdir = "$directory/PANTHER12_Tree_MSF";
+  # my $pantherdir = "$directory/PANTHER12_Tree_MSF";
+  my $pantherdir = "$directory/Tree_MSF";
 
   if(!-d $pantherdir){
     die "The PANTHER alignments directory, $pantherdir, does not exisit.\n";
   }
   $options->{pantherdir} = $pantherdir;
   #-------------------------------------------------------------------------------------
-  my $annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
+  # my $annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
+  my $annotationfile = "$directory/PAINT_Annotations/PAINT_Annotatations_TOTAL.txt";
 
   if(!-e $annotationfile){
     die "The PANTHER annotation file, $annotationfile, does not exist.\n";
@@ -589,12 +592,12 @@ sub _runRAxMLAndAnnotate {
   if(!$mapANs){  
     $mapANs = "root";
     my $annotation = $options->{annotations}->{$matchpthr.":".$mapANs};
-    $result = "$queryid\t$matchpthr\t$annotation\n";
+    $result = "$queryid\t$matchpthr\t$annotation\t$matchpthr:$mapANs\n";
   }else{
     my $commonAN = &commonancestor($options, $mapANs, $matchpthr);
     if (!$commonAN) {$commonAN = "root"};
     my $annotation = $options->{annotations}->{$matchpthr.":".$commonAN};
-    $result = "$queryid\t$matchpthr\t$annotation\n";
+    $result = "$queryid\t$matchpthr\t$annotation\t$matchpthr:$commonAN\n";
   }
   return $result;
 }
