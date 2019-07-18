@@ -42,7 +42,8 @@ my ($fastafile,
 
 my $options = {};
 processOptions( $options, $help, $outfile, $directory, $fastafile, 
-               $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $hmmer, $keep);
+              #  $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $hmmer, $keep);
+               $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep);
 #-------------------------------------------------------------------------------------
 #This is really the main body of the script
 
@@ -217,7 +218,7 @@ sub runhmmer {
                      $options->{pantherhmm}." ".
                      $options->{fastafile}." > /dev/null";
     
-    system($hmmercommand) and die "Error running $hmmercommand";
+    system("./$hmmercommand") and die "Error running $hmmercommand";
   }
 }
 

@@ -13,8 +13,11 @@
 # use FamLibBuilder;
 #use Algs::Hmmer;
 use Data::UUID;
+use CGI;
+use Try::Tiny;
 
 # default values
+my $cgi = CGI->new;
 #my $library = "PANTHER8.0";
 #my $library = "./PANTHER8.0";
 my $library = "../Current_Release4";
@@ -57,7 +60,6 @@ if ($errFile) {
 # my $flb = new FamLibBuilder($library,"prod");
 # die "Cannot read library\n" unless ($flb->exists());
 
-print "Content-type:text/html\n\n";
 
 #### ****DONT ALTER FOLLOWING ***###############################
 ## Determine the form's REQUEST_METHOD (GET or POST) and split the form   #
@@ -84,22 +86,18 @@ foreach $pair (@pairs) {
 
 my $seq = $FORM{'sequence'};
 
-die "Missing input sequence\n" unless ($seq);
+unless ($seq) {
+    print $cgi->header(-type=>'text/plain', -status=> '400 Bad Request');
+    print "<Response>\n";
+    print "  <Error>Missing input sequence</Error>\n";
+    print "</Response>\n";
+    die "Missing input sequence\n";
+}
+
 unless ($seq=~/^>/) {
   $seq = ">sequence\n" . $seq;
 }
 # die "Missing input sequence\n" unless ($seq);
-
-# print "$seq\n";
-
-#what happens if seq not have >
-
-# my $tmpFasta = "/usr/tmp/scoreOnFly.$$.fasta";
-# #my $tmpFasta = "./test.fasta";
-# my $tmpScoreRes = "/usr/tmp/scoreOnFly.$$.score";
-# open(TMP,">$tmpFasta");
-# print TMP $seq;
-# close(TMP);
 
 # Uniqify seq in and out files for each session w/ UUIDs
 $ug = Data::UUID->new;
@@ -108,37 +106,69 @@ $uuid_str = $ug->to_string($uuid);
 
 my $tmpIn = "../tmp/$uuid_str.fasta";
 my $tmpOut = "../tmp/$uuid_str-out.txt";
+my $tmpInHmmscan = "$tmpIn.hmmscan.out";
 
 open(SEQIN, '>', $tmpIn) || die "Could not open $tmpIn\n";
 print SEQIN $seq;
 close(SEQIN);
 
-# Add RAxML cmd to path for use in treeGrafter.pl
-local $ENV{PATH} = "$ENV{PATH}:/opt/panther/TreeGrafter/RAxML/standard-RAxML-master/";
-# #now call treeGrafter script
-# my $cmd = "./pantherScore.pl -l $library -D B -i $tmpFasta -o $tmpScoreRes";
-# my $cmd = "perl ../treeGrafter.pl -f $tmpIn -d ../Test/PANTHER_mini -auto -o $tmpOut > /dev/null";
-my $cmd = "perl ../treeGrafter.pl -f $tmpIn -d ../resources/PANTHER14.1_data/ -auto -o $tmpOut > /dev/null";
-print TO "treeGrafter.pl started\n";
-if (system($cmd)) { 
-  die "FATAL ERROR in treeGrafter : $cmd \nSystem command returned error status: ($!)\n"; 
-} 
+try {
+  # Add RAxML cmd to path for use in treeGrafter.pl
+  local $ENV{PATH} = "$ENV{PATH}:/opt/panther/TreeGrafter/RAxML/standard-RAxML-master/";
+  # now call treeGrafter script - use -k to keep tmp files (../resources/PANTHER14.1_data/tmp) but delete after use here
+  my $cmd = "perl ../treeGrafter.pl -f $tmpIn -d ../resources/PANTHER14.1_data/ -algo hmmscan -o $tmpOut -k > /dev/null";
+  print TO "treeGrafter.pl started\n";
+  if (system($cmd)) { 
+    die "FATAL ERROR in treeGrafter : $cmd \nSystem command returned error status: ($!)\n"; 
+  } 
 
-open(TMP,"$tmpOut") || die "Cannot open output file\n";
-my $graftPoint = "";
-while(my $line = <TMP>) {
-  my @array = split(/\t/,$line);
-  chomp @array;
-  $graftPoint = $array[3];
-  # print "$graftPoint\n";
-  last;  # Only print first
+  open(TMP,"$tmpOut") || die "Cannot open output file\n";
+  my $graftPoint = "";
+  while(my $line = <TMP>) {
+    my @array = split(/\t/,$line);
+    chomp @array;
+    $graftPoint = $array[3];
+    $matchFam = $array[1];
+    # print "$graftPoint\n";
+    last;  # Only print first
+  }
+
+  # Get MSA file passed into RAxML - TODO: read and pass into XML <MSA>
+  $tmpQueryFasta = "/auto/pmd-02/pdt/pdthomas/panther/debert/TreeGrafter/resources/PANTHER14.1_data/tmp/$uuid_str.$matchFam.fasta";
+
+  $query_seq = "";
+  $seq_count = 0;
+  open MSA, "<", $tmpQueryFasta or die "cannot open ".$tmpQueryFasta."\n";
+  while(<MSA>) {
+    if ($_ =~ />/) {
+      $seq_count++;
+    }
+    if ($seq_count == 2) {
+      last;
+    }
+    $query_seq = $query_seq.$_;
+  }
+
+  print $cgi->header();
+  print "<Response>\n";
+  print "  <GraphPointNode>$graftPoint</GraphPointNode>\n";
+  print "  <MSA>$query_seq</MSA>\n";
+  print "</Response>\n";
+
+  close(TMP);
+
+  unlink $tmpIn;
+  unlink $tmpOut;
+  unlink $tmpInHmmscan;
 }
-
-print "<Response>\n";
-print "  <GraphPointNode>$graftPoint</GraphPointNode>\n";
-print "</Response>\n";
-
-close(TMP);
+catch {
+  print $cgi->header(-type=>'text/plain', -status=> '500 Internal Server Error');
+  print "<Response>\n";
+  print "  <Error>Exception: $_</Error>\n";
+  print "</Response>\n";
+  die "Exception: $_\n";
+};
+#print $cgi->header();
 
 # open(FH,"$tmpScoreRes") || die "Cannot open output file\n";
 # print "<scores>\n";
