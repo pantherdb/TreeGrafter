@@ -60,6 +60,10 @@ if ($errFile) {
 # my $flb = new FamLibBuilder($library,"prod");
 # die "Cannot read library\n" unless ($flb->exists());
 
+# Uniqify seq in and out files for each session w/ UUIDs
+$ug = Data::UUID->new;
+$uuid = $ug->create();
+$uuid_str = $ug->to_string($uuid);
 
 #### ****DONT ALTER FOLLOWING ***###############################
 ## Determine the form's REQUEST_METHOD (GET or POST) and split the form   #
@@ -95,14 +99,9 @@ unless ($seq) {
 }
 
 unless ($seq=~/^>/) {
-  $seq = ">sequence\n" . $seq;
+  $seq = ">$uuid_str\n" . $seq;
 }
 # die "Missing input sequence\n" unless ($seq);
-
-# Uniqify seq in and out files for each session w/ UUIDs
-$ug = Data::UUID->new;
-$uuid = $ug->create();
-$uuid_str = $ug->to_string($uuid);
 
 my $tmpIn = "../tmp/$uuid_str.fasta";
 my $tmpOut = "../tmp/$uuid_str-out.txt";
@@ -134,7 +133,8 @@ try {
   }
 
   # Get MSA file passed into RAxML - TODO: read and pass into XML <MSA>
-  $tmpQueryFasta = "/auto/pmd-02/pdt/pdthomas/panther/debert/TreeGrafter/resources/PANTHER14.1_data/tmp/$uuid_str.$matchFam.fasta";
+  $tmpQueryFasta = "../resources/PANTHER14.1_data/tmp/$uuid_str.$matchFam.fasta";
+  $tmpQueryFasta =~ s/-/\_/g;
 
   $query_seq = "";
   $seq_count = 0;
