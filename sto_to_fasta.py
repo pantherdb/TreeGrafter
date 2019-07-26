@@ -72,18 +72,20 @@ if __name__ == "__main__":
     counter = 0
 
     process_books = []
-    books = os.listdir("/auto/pmd-02/pdt/pdthomas/panther/famlib/rel/PANTHER13.1/books/")
+    base_dir = args.base_dir
+    
     # books = os.listdir("/auto/pmd-02/pdt/pdthomas/panther/famlib/rel/PANTHER13.1/books/")
-    for b in books:
-        if not b.startswith("PTHR"):
+    # for b in books:
+    for f in os.listdir(base_dir):
+        # Use presence of .sto files as qualification for processing
+        if not f.startswith("PTHR") or not f.endswith(".sto"):
             continue
         if counter == node_num:
-            process_books.append(b)
+            process_books.append(f.replace(".sto", ""))
         counter += 1
         if counter == num_tasks:
             counter = 0
 
-    base_dir = args.base_dir
     log_file = open("log/sto_to_fasta.log.{}".format(node_num), "w+")
     log_file.write("Processing {} books in task {}:\n".format(len(process_books), node_num))
     log_file.write(",".join(process_books) + "\n")
