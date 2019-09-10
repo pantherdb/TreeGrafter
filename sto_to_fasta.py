@@ -1,3 +1,9 @@
+# What this script does:
+#  Maps sequence long IDs in .sto file to node AN###'s in .tree file
+#  Removes '.'s from sequence
+#  Removes lowercase bases
+#  Outputs results into .AN.fasta files
+
 import string
 import argparse
 import os
