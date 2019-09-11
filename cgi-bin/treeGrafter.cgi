@@ -127,6 +127,7 @@ try {
     my @array = split(/\t/,$line);
     chomp @array;
     $graftPoint = $array[3];
+    $goAnnotations = $array[2];
     $matchFam = $array[1];
     # print "$graftPoint\n";
     last;  # Only print first
@@ -159,6 +160,7 @@ try {
 
   print $cgi->header();
   print "<Response>\n";
+  print "  <GOAnnotations>$goAnnotations</GOAnnotations>\n";
   print "  <GraphPointNode>$graftPoint</GraphPointNode>\n";
   print "  <MSA>$query_seq</MSA>\n";
   print "</Response>\n";

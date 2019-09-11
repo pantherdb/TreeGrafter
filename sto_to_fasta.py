@@ -76,7 +76,7 @@ if __name__ == "__main__":
     
     # books = os.listdir("/auto/pmd-02/pdt/pdthomas/panther/famlib/rel/PANTHER13.1/books/")
     # for b in books:
-    for f in os.listdir(base_dir):
+    for f in os.listdir(base_dir + "/Tree_MSF"):
         # Use presence of .sto files as qualification for processing
         if not f.startswith("PTHR") or not f.endswith(".sto"):
             continue
