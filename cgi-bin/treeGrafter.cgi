@@ -135,6 +135,7 @@ try {
     @split_annotations = split(/\s+/,$annotations);
     $sf = $split_annotations[0];
     $goAnnotations = $split_annotations[1];
+    $pcAnnotations = $split_annotations[2];
     last;  # Only print first
   }
 
@@ -168,6 +169,7 @@ try {
   print "  <GOAnnotations>$goAnnotations</GOAnnotations>\n";
   print "  <GraphPointNode>$graftPoint</GraphPointNode>\n";
   print "  <MSA>$query_seq</MSA>\n";
+  print "  <PCAnnotations>$pcAnnotations</PCAnnotations>\n";
   print "  <SF>$sf</SF>\n";
   print "</Response>\n";
 

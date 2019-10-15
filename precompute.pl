@@ -32,6 +32,7 @@ my $nodefile = "$source_dir/DBload/node.dat";
 my %gene_node; my %node;
 my %annotations;
 my %sfAnnotations;
+my %pcAnnotations;
 my %pthrs;
 
 print "Parsing node file\n";
@@ -89,6 +90,14 @@ while(<IN>){
     }
     $sfAnnotations{$a[0]}=$sf;
   }
+  if ($a[2] eq "PC"){
+    my $pc;
+    if ($a[1] =~ /(PTHR[0-9]+):(PC[0-9]+)/){
+      @pc = split(":", $a[1]);
+      $pthrs{$1} =1;
+    }
+    $pcAnnotations{$a[0]}{$pc[1]} = 1;
+  }
 
 }
 close IN;
@@ -142,6 +151,7 @@ sub propagate{
 
   my $instance;
   my $subfamily;
+  my $pcInstance = "";
   my $root = $tree->get_root_node;
   unless ($root->id){
     my @tmp = $root->each_Descendent;
@@ -159,12 +169,12 @@ sub propagate{
   if (exists $sfAnnotations{$rootid}){
     $subfamily = $sfAnnotations{$rootid};
   }
-  # foreach my $sf (keys %{$sfAnnotations{$rootid}}){
-  #     $sfInstance .= "$sf".";";
-  #   }
-  print INTER "$pthr:root\t$subfamily  $toprint\t$ptn\n";
-  print INTER "$rootid\t$subfamily  $toprint\t$ptn\n";
-  &checkchild($root,$instance,$subfamily,$pthr);
+  foreach my $pc (keys %{$pcAnnotations{$rootid}}){
+    $pcInstance .= "$pc".";";
+  }
+  print INTER "$pthr:root\t$subfamily  $toprint  $pcInstance\t$ptn\n";
+  print INTER "$rootid\t$subfamily  $toprint  $pcInstance\t$ptn\n";
+  &checkchild($root,$instance,$subfamily,$pcInstance,$pthr);
 }
 
 close INTER;
@@ -174,6 +184,7 @@ sub checkchild{
   my $node = shift;
   my $annot = shift;
   my $sfAnnot = shift;
+  my $pcAnnot = shift;
   my $pthr = shift;
   return if ($node->is_Leaf);
 
@@ -181,6 +192,7 @@ sub checkchild{
     my $childid = "$pthr:".$child->id;
     my $instance = $annot;
     my $subfamily = $sfAnnot;
+    my $pcInstance = $pcAnnot;
     foreach my $go (keys %{$annotations{$childid}{"GAIN"}}){
       $instance .= "GAIN:$go".";";
     }
@@ -191,17 +203,19 @@ sub checkchild{
     if (exists $sfAnnotations{$childid}){
       $subfamily = $sfAnnotations{$childid};
     }
-    # foreach my $sf (keys %{$sfAnnotations{$childid}}){
-    #   $sfInstance .= "$sf".";";
-    # }
+    if (exists $pcAnnotations{$childid}){
+      foreach my $pc (keys %{$pcAnnotations{$childid}}){
+        $pcInstance .= "$pc".";";
+      }
+    }
     if ($child->is_Leaf){
       my $longid = $gene_node{$childid};
-      print LEAF "$childid\t$subfamily  $toprint\t$longid\n";
+      print LEAF "$childid\t$subfamily  $toprint  $pcInstance\t$longid\n";
     }
     else{
       my $ptn = $node{$childid};
-      print INTER "$childid\t$subfamily  $toprint\t$ptn\n";
-      &checkchild($child,$instance,$subfamily,$pthr);
+      print INTER "$childid\t$subfamily  $toprint  $pcInstance\t$ptn\n";
+      &checkchild($child,$instance,$subfamily,$pcInstance,$pthr);
     }
   }
 }
