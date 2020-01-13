@@ -218,7 +218,7 @@ sub runhmmer {
                      $options->{pantherhmm}." ".
                      $options->{fastafile}." > /dev/null";
     
-    system("./$hmmercommand") and die "Error running $hmmercommand";
+    system("$hmmercommand") and die "Error running $hmmercommand";
   }
 }
 
