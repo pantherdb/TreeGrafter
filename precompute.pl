@@ -31,6 +31,8 @@ my $nodefile = "$source_dir/DBload/node.dat";
 
 my %gene_node; my %node;
 my %annotations;
+my %sfAnnotations;
+my %pcAnnotations;
 my %pthrs;
 
 print "Parsing node file\n";
@@ -69,15 +71,34 @@ open IN, "< $annotationfile" or die;
 while(<IN>){
   chomp;
   my @a = split(/\t/);
-  next unless ($a[2] eq "GO");
-  my $go;
-  if ($a[1] =~ /(PTHR[0-9]+):(GO:[0-9]+)/){
-    $go = $2;
-    $pthrs{$1} =1;
+  # next unless ($a[2] eq "GO");
+  if ($a[2] eq "GO"){
+    my $go;
+    if ($a[1] =~ /(PTHR[0-9]+):(GO:[0-9]+)/){
+      $go = $2;
+      $pthrs{$1} =1;
+    }
+    unless (exists $annotations{$a[0]}{"NOT"}{$go}){
+      $annotations{$a[0]}{"GAIN"}{$go} =1;
+    }
   }
-  unless (exists $annotations{$a[0]}{"NOT"}{$go}){
-    $annotations{$a[0]}{"GAIN"}{$go} =1;
+  if ($a[2] eq "SF"){
+    my $sf;
+    if ($a[1] =~ /(PTHR[0-9]+):(SF[0-9]+)/){
+      $sf = $a[1];
+      $pthrs{$1} =1;
+    }
+    $sfAnnotations{$a[0]}=$sf;
   }
+  if ($a[2] eq "PC"){
+    my $pc;
+    if ($a[1] =~ /(PTHR[0-9]+):(PC[0-9]+)/){
+      @pc = split(":", $a[1]);
+      $pthrs{$1} =1;
+    }
+    $pcAnnotations{$a[0]}{$pc[1]} = 1;
+  }
+
 }
 close IN;
 
@@ -129,6 +150,8 @@ sub propagate{
   my $tree = $treeio->next_tree;
 
   my $instance;
+  my $subfamily;
+  my $pcInstance = "";
   my $root = $tree->get_root_node;
   unless ($root->id){
     my @tmp = $root->each_Descendent;
@@ -143,9 +166,15 @@ sub propagate{
     $instance .= "NOT:$go".";";
   }
   my $toprint = &processinstance($instance);
-  print INTER "$pthr:root\t$toprint\t$ptn\n";
-  print INTER "$rootid\t$toprint\t$ptn\n";
-  &checkchild($root,$instance,$pthr);
+  if (exists $sfAnnotations{$rootid}){
+    $subfamily = $sfAnnotations{$rootid};
+  }
+  foreach my $pc (keys %{$pcAnnotations{$rootid}}){
+    $pcInstance .= "$pc".";";
+  }
+  print INTER "$pthr:root\t$subfamily  $toprint  $pcInstance\t$ptn\n";
+  print INTER "$rootid\t$subfamily  $toprint  $pcInstance\t$ptn\n";
+  &checkchild($root,$instance,$subfamily,$pcInstance,$pthr);
 }
 
 close INTER;
@@ -154,12 +183,16 @@ close LEAF;
 sub checkchild{
   my $node = shift;
   my $annot = shift;
+  my $sfAnnot = shift;
+  my $pcAnnot = shift;
   my $pthr = shift;
   return if ($node->is_Leaf);
 
   foreach my $child ($node->each_Descendent){
     my $childid = "$pthr:".$child->id;
     my $instance = $annot;
+    my $subfamily = $sfAnnot;
+    my $pcInstance = $pcAnnot;
     foreach my $go (keys %{$annotations{$childid}{"GAIN"}}){
       $instance .= "GAIN:$go".";";
     }
@@ -167,14 +200,22 @@ sub checkchild{
       $instance .= "NOT:$go".";";
     }
     my $toprint = &processinstance($instance);
+    if (exists $sfAnnotations{$childid}){
+      $subfamily = $sfAnnotations{$childid};
+    }
+    if (exists $pcAnnotations{$childid}){
+      foreach my $pc (keys %{$pcAnnotations{$childid}}){
+        $pcInstance .= "$pc".";";
+      }
+    }
     if ($child->is_Leaf){
       my $longid = $gene_node{$childid};
-      print LEAF "$childid\t$toprint\t$longid\n";
+      print LEAF "$childid\t$subfamily  $toprint  $pcInstance\t$longid\n";
     }
     else{
       my $ptn = $node{$childid};
-      print INTER "$childid\t$toprint\t$ptn\n";
-      &checkchild($child,$instance,$pthr);
+      print INTER "$childid\t$subfamily  $toprint  $pcInstance\t$ptn\n";
+      &checkchild($child,$instance,$subfamily,$pcInstance,$pthr);
     }
   }
 }
@@ -187,10 +228,10 @@ sub processinstance{
   foreach my $a (@a){
     my @s = split(/:/,$a);
     if ($s[0] eq "GAIN"){
-      $store{$s[1].$s[2]} ++;
+      $store{$s[1].":".$s[2]} ++;
     }
     else{
-      $store{$s[1].$s[2]}--;
+      $store{$s[1].":".$s[2]}--;
     }
   }
   my $out;

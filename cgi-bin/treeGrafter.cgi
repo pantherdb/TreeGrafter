@@ -128,9 +128,24 @@ try {
     my @array = split(/\t/,$line);
     chomp @array;
     $graftPoint = $array[3];
+    $annotations = $array[2];
     $matchFam = $array[1];
     # print "$graftPoint\n";
+
+    # Split to get SF and GO annotations
+    @split_annotations = split(/\s+/,$annotations);
+    $sf = $split_annotations[0];
+    $goAnnotations = $split_annotations[1];
+    $pcAnnotations = $split_annotations[2];
     last;  # Only print first
+  }
+
+  unless ($matchFam) {
+    print $cgi->header();
+    print "<Response>\n";
+    print "</Response>\n";
+    #die "No family match for $uuid_str\n";
+    exit;
   }
 
   # Get MSA file passed into RAxML - TODO: read and pass into XML <MSA>
@@ -152,8 +167,11 @@ try {
 
   print $cgi->header();
   print "<Response>\n";
+  print "  <GOAnnotations>$goAnnotations</GOAnnotations>\n";
   print "  <GraphPointNode>$graftPoint</GraphPointNode>\n";
   print "  <MSA>$query_seq</MSA>\n";
+  print "  <PCAnnotations>$pcAnnotations</PCAnnotations>\n";
+  print "  <SF>$sf</SF>\n";
   print "</Response>\n";
 
   close(TMP);
