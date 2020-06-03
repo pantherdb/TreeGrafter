@@ -50,10 +50,6 @@ my $dataDir = $config_hash->{'PTHR_DATA_DIR'};
 my $hmmerPath = $config_hash->{'HMMER_PATH'};
 my $raxmlPath  = $config_hash->{'RAXML_PATH'};
 
-print "$dataDir\n";
-print "$hmmerPath\n";
-print "$raxmlPath\n";
-
 # do file redirects
 if ($outFile) {
     open (STDOUT, ">$outFile") || &usage("Cannot open $outFile");
