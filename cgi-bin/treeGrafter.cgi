@@ -15,6 +15,7 @@
 use Data::UUID;
 use CGI;
 use Try::Tiny;
+use Config::File;
 
 # default values
 my $cgi = CGI->new;
@@ -41,6 +42,17 @@ if ($#ARGV == 0) {
     &usage("Please specify only one input file.") if ($opt_i);
     $inFile = $ARGV[0];
 }
+
+my $config_file = "../config";
+my $config_hash = Config::File::read_config_file($config_file);
+# my $dataDir = "../resources/PANTHER14.1_data_new/PANTHER14.1_data/";
+my $dataDir = $config_hash->{'PTHR_DATA_DIR'};
+my $hmmerPath = $config_hash->{'HMMER_PATH'};
+my $raxmlPath  = $config_hash->{'RAXML_PATH'};
+
+print "$dataDir\n";
+print "$hmmerPath\n";
+print "$raxmlPath\n";
 
 # do file redirects
 if ($outFile) {
@@ -114,9 +126,9 @@ close(SEQIN);
 try {
   # Add RAxML cmd to path for use in treeGrafter.pl
   #local $ENV{PATH} = "$ENV{PATH}:/opt/panther/TreeGrafter/RAxML/standard-RAxML-master/";
-  local $ENV{PATH} = "$ENV{PATH}:/opt/panther/TreeGrafter/RAxML/standard-RAxML-master/:/opt/panther/hmmer-3.1b2-linux-intel-x86_64/binaries/";
+  local $ENV{PATH} = "$ENV{PATH}:$hmmerPath:$raxmlPath";
   # now call treeGrafter script - use -k to keep tmp files (../resources/PANTHER14.1_data/tmp) but delete after use here
-  my $cmd = "perl ../treeGrafter.pl -f $tmpIn -d ../resources/PANTHER14.1_data/ -algo hmmscan -o $tmpOut -k > /dev/null";
+  my $cmd = "perl ../treeGrafter.pl -f $tmpIn -d $dataDir -algo hmmscan -o $tmpOut -k > /dev/null";
   print TO "treeGrafter.pl started\n";
   if (system($cmd)) { 
     die "FATAL ERROR in treeGrafter : $cmd \nSystem command returned error status: ($!)\n"; 
@@ -149,7 +161,7 @@ try {
   }
 
   # Get MSA file passed into RAxML - TODO: read and pass into XML <MSA>
-  $tmpQueryFasta = "../resources/PANTHER14.1_data/tmp/$uuid_str.$matchFam.fasta";
+  $tmpQueryFasta = "$dataDir/tmp/$uuid_str.$matchFam.fasta";
   $tmpQueryFasta =~ s/-/\_/g;
 
   $query_seq = "";
