@@ -1,0 +1,3 @@
+RAXML_PATH = /path/to/raxmlHPC-SSE3/command/
+HMMER_PATH = /path/to/hmmer/commands/
+PTHR_DATA_DIR = /path/to/PANTHER##.#_data/
