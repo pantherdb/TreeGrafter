@@ -17,6 +17,7 @@ my ($fastafile,
     $raxmlloc, 
     $hmmerloc, 
     $directory, 
+    $tmpDir,
     $keep, 
     $algo, 
     $cpus,  
@@ -31,6 +32,7 @@ my ($fastafile,
      "s=s" => \$hmmerloc, # -s for the location of hmmscan if not in PATH
      "o=s" => \$outfile, # -o for the output file
      "d=s" => \$directory, # -d for directory of the package
+     "t=s" => \$tmpDir, # -t for directory where tmp files are stored
      "algo=s" => \$algo,
      "auto" => \$auto,
      "cpus=i" => \$cpus,
@@ -41,7 +43,7 @@ my ($fastafile,
 
 
 my $options = {};
-processOptions( $options, $help, $outfile, $directory, $fastafile, 
+processOptions( $options, $help, $outfile, $directory, $tmpDir, $fastafile, 
               #  $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $hmmer, $keep);
                $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep);
 #-------------------------------------------------------------------------------------
@@ -63,14 +65,14 @@ graftMatches($options, $matches, $allResults);
 printResults($options, $allResults);
 
 if(!$options->{keep}){
-  rmdir($options->{directory}."/tmp");
+  rmdir($options->{tmpDir});
 }
 
 exit;
 #--------------------------------------------------------------------------------------
 
 sub processOptions {
-  my ( $options, $help, $outfile, $directory, $fastafile, 
+  my ( $options, $help, $outfile, $directory, $tmpDir, $fastafile, 
         $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep) = @_;
 
   &usage(0) if($help);
@@ -98,8 +100,9 @@ sub processOptions {
     die "Your directory, $directory, does not exisit.\n";
   }
   $options->{directory} = $directory;
-  if(!-d "$directory/tmp"){
-    mkdir("$directory/tmp");
+  $options->{tmpDir} = $tmpDir;
+  if(!-d "$tmpDir"){
+    mkdir("$tmpDir");
   }
   
   #We expect this directory to have a certain structure
@@ -461,7 +464,7 @@ sub _graftPipeline{
   my $resString  = _runRAxMLAndAnnotate( $options, $queryid, $matchpthr, $queryfasta);
   
   unless($options->{keep}){
-    my $command = "rm -rf ".$options->{directory}."/tmp/*";
+    my $command = "rm -rf ".$options->{tmpDir}."/*";
     #TODO - try and replace with perl solution.
     system($command);
   }
@@ -535,7 +538,7 @@ sub _generateFasta {
 
   my @parts = $querymsf =~ /(.{1,80})/g;
   $queryid =~ s/[^\w]/\_/g;
-  my $queryfasta = $options->{directory}."/tmp/$queryid.$matchpthr.fasta";
+  my $queryfasta = $options->{tmpDir}."/$queryid.$matchpthr.fasta";
   open OUT,"> $queryfasta" or die "cannot open $queryfasta:[$!]\n";
   print OUT ">query_$queryid\n";
   foreach my $line (@parts){
@@ -563,7 +566,7 @@ sub _runRAxMLAndAnnotate {
   ###############################################################
   #TODO:make sure this tmp dir is unique to the process.
   $queryid =~ s/[^\w]/\_/g;
-  my $raxmldir = $options->{directory}."/tmp/$matchpthr"."_$queryid"."_"."raxml$$";
+  my $raxmldir = $options->{tmpDir}."/$matchpthr"."_$queryid"."_"."raxml$$";
   my $bifurnewick = $options->{pantherdir}."/$matchpthr.bifurcate.newick";
   if (! -e $bifurnewick) {
     print STDERR "no bifurcate newickfile for $matchpthr\n";
