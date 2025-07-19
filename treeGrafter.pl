@@ -264,6 +264,7 @@ sub parsehmmer {
 	    my @a = split(/ +/);
 	    push(@{$matches->{$matchpthr}->{$queryid}->{hmmstart}}, $a[7]);
 	    push(@{$matches->{$matchpthr}->{$queryid}->{hmmend}},   $a[8]);
+      push(@{$matches->{$matchpthr}->{$queryid}->{score}}, $a[3]); # Add score
 	  }
 	}
 	
@@ -476,49 +477,60 @@ sub _graftPipeline{
 sub _querymsf {
   my ($matchdata, $length_msf, $queryid) = @_;
 
-  #Now build up the query sequence    
-  my $querymsf; #aligned sequence placeholder
-
-  my $start = $matchdata->{hmmstart}->[0];
-  #N-terminaly padd the sequence
-  foreach my $i (1..$start-1){
-    $querymsf .= "-";
-  }
+  # Initialize the query MSF with gaps
+  my @querymsf = ('-') x $length_msf;
   
-  #For the first element/domain, extract the query string
-  my @aligna = split(//,$matchdata->{matchalign}->[0]);
-  my @haligna = split(//,$matchdata->{hmmalign}->[0]);
-  my $alignas = length($matchdata->{hmmalign}->[0]);
-  foreach my $a (0..$alignas-1){
-    next if (($haligna[$a] eq ".")); #hmm insert state
-    $querymsf .= $aligna[$a];
-  }
-
-  #Now we need to add in any additional domains in the next part
+  # Process domains by score (strongest first) and skip overlaps
   my $domains = scalar @{$matchdata->{matchalign}};
-  foreach my $j (1..$domains-1){ 
-    my $start = $matchdata->{hmmstart}->[$j];
-    my $end = $matchdata->{hmmend}->[$j-1];
-    #This bridges the gap between the hits
-    foreach my $i ($end+1..$start-1){
-      $querymsf .= "-";
+
+  # Create array of domain indices sorted by score (highest first)
+  my @domain_order = sort { 
+    $matchdata->{score}->[$b] <=> $matchdata->{score}->[$a] 
+  } (0..$domains-1);
+
+  my @used_positions;
+
+  for my $domain_idx (@domain_order) {
+    my $hmmstart = $matchdata->{hmmstart}->[$domain_idx];
+    my $hmmend = $matchdata->{hmmend}->[$domain_idx];
+    my $score = $matchdata->{score}->[$domain_idx];
+    
+    # Check for overlap with already used positions
+    my $overlap = 0;
+    for my $pos ($hmmstart..$hmmend) {
+      if ($used_positions[$pos]) {
+        $overlap = 1;
+        last;
+      }
     }
     
-    my @aligna = split(//,$matchdata->{matchalign}->[$j]);
-    my @haligna = split(//,$matchdata->{hmmalign}->[$j]);
-    my $alignas = length($matchdata->{hmmalign}->[$j]);
-    foreach my $a (0..$alignas-1){
-      next if ($haligna[$a] eq "."); #insert state, so skipping.
-      $querymsf .= $aligna[$a];
+    if ($overlap) {
+      warn "Skipping overlapping domain $domain_idx for $queryid (HMM positions $hmmstart-$hmmend, score $score)\n";
+      next;
+    }
+    
+    # Mark positions as used
+    for my $pos ($hmmstart..$hmmend) {
+      $used_positions[$pos] = 1;
+    }
+    
+    # Process this domain
+    my @aligna = split(//, $matchdata->{matchalign}->[$domain_idx]);
+    my @haligna = split(//, $matchdata->{hmmalign}->[$domain_idx]);
+    
+    my $msa_pos = $hmmstart - 1; # Convert to 0-based indexing
+    
+    for my $i (0..$#haligna) {
+      if ($haligna[$i] ne '.') { # Not an insert state
+        if ($msa_pos < $length_msf) {
+          $querymsf[$msa_pos] = $aligna[$i];
+        }
+        $msa_pos++;
+      }
     }
   }
-
-  #Pad out as necessary
-  my $prevend = $matchdata->{hmmend}->[$domains-1];
-  foreach my $i ($prevend..$length_msf-1){
-    $querymsf .= "-";
-  }
-
+  
+  my $querymsf = join('', @querymsf);
   my $l = length($querymsf);
   unless ($l eq $length_msf){
     print "ERROR MSF of $queryid should have length $length_msf, actual length is $l\n";
@@ -527,7 +539,7 @@ sub _querymsf {
 
   $querymsf = uc($querymsf);
   return $querymsf;
-} 
+}
 
 
 #---------------------------------------------------------------
