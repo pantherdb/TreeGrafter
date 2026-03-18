@@ -65,4 +65,4 @@ WORKDIR /opt/TreeGrafter.git
 ENTRYPOINT ["perl", "treeGrafter.pl"]
 
 # Example CMD
-# docker run --rm --name treegrafter -v /path/to/TreeGrafter.git/Test:/tmp treegrafter -f ./Test/sample.fasta -o /tmp/sample.1.out -d /tmp/PANTHER_mini -auto
+# docker run --rm --name treegrafter -v /path/to/TreeGrafter.git/Test:/tmp treegrafter -f ./Test/sample.fasta -o /tmp/sample.1.out -d /tmp/PANTHER_mini -t /tmp -auto

@@ -67,7 +67,10 @@ graftMatches($options, $matches, $allResults);
 printResults($options, $allResults);
 
 if(!$options->{keep}){
-  rmdir($options->{tmpDir});
+  my $tmpDir = $options->{tmpDir};
+  if (defined($tmpDir) && $tmpDir ne '' && $tmpDir ne '/') {
+    rmdir($tmpDir);
+  }
 }
 
 exit;
@@ -102,6 +105,9 @@ sub processOptions {
     die "Your directory, $directory, does not exisit.\n";
   }
   $options->{directory} = $directory;
+  if (!defined($tmpDir) || $tmpDir eq '') {
+    $tmpDir = "$directory/tmp";
+  }
   $options->{tmpDir} = $tmpDir;
   if(!-d "$tmpDir"){
     mkdir("$tmpDir");
@@ -469,9 +475,12 @@ sub _graftPipeline{
   my $resString  = _runRAxMLAndAnnotate( $options, $queryid, $matchpthr, $queryfasta);
   
   unless($options->{keep}){
-    my $command = "rm -rf ".$options->{tmpDir}."/*";
-    #TODO - try and replace with perl solution.
-    system($command);
+    my $tmpDir = $options->{tmpDir};
+    if (defined($tmpDir) && $tmpDir ne '' && $tmpDir ne '/' && -d $tmpDir) {
+      my $command = "rm -rf " . $tmpDir . "/*";
+      #TODO - try and replace with perl solution.
+      system($command);
+    }
   }
   return($resString);
 }
