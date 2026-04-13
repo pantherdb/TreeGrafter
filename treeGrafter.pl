@@ -23,6 +23,7 @@ my ($fastafile,
     $cpus,  
     $auto,
     $hmmer,
+    $annotationfile,
     $help);
 
 &GetOptions
@@ -37,15 +38,16 @@ my ($fastafile,
      "auto" => \$auto,
      "cpus=i" => \$cpus,
      "hmmer=s" => \$hmmer,
+     "a=s" => \$annotationfile, # -a for the PAINT annotation file path
      "k" => \$keep, #-k for keeping the tmp files
      "h"   => \$help, #print the usage statement
     ) or die "Invalid option passed.\n";
 
 
 my $options = {};
-processOptions( $options, $help, $outfile, $directory, $tmpDir, $fastafile, 
+processOptions( $options, $help, $outfile, $directory, $tmpDir, $fastafile,
               #  $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $hmmer, $keep);
-               $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep);
+               $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep, $annotationfile);
 #-------------------------------------------------------------------------------------
 #This is really the main body of the script
 
@@ -65,15 +67,18 @@ graftMatches($options, $matches, $allResults);
 printResults($options, $allResults);
 
 if(!$options->{keep}){
-  rmdir($options->{tmpDir});
+  my $tmpDir = $options->{tmpDir};
+  if (defined($tmpDir) && $tmpDir ne '' && $tmpDir ne '/') {
+    rmdir($tmpDir);
+  }
 }
 
 exit;
 #--------------------------------------------------------------------------------------
 
 sub processOptions {
-  my ( $options, $help, $outfile, $directory, $tmpDir, $fastafile, 
-        $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep) = @_;
+  my ( $options, $help, $outfile, $directory, $tmpDir, $fastafile,
+        $raxmlloc, $hmmerloc, $algo, $auto, $cpus, $keep, $annotationfile) = @_;
 
   &usage(0) if($help);
 
@@ -100,6 +105,9 @@ sub processOptions {
     die "Your directory, $directory, does not exisit.\n";
   }
   $options->{directory} = $directory;
+  if (!defined($tmpDir) || $tmpDir eq '') {
+    $tmpDir = "$directory/tmp";
+  }
   $options->{tmpDir} = $tmpDir;
   if(!-d "$tmpDir"){
     mkdir("$tmpDir");
@@ -125,7 +133,9 @@ sub processOptions {
   $options->{pantherdir} = $pantherdir;
   #-------------------------------------------------------------------------------------
   # my $annotationfile = "$directory/PANTHER12_PAINT_Annotations/PANTHER12_PAINT_Annotatations_TOTAL.txt";
-  my $annotationfile = "$directory/PAINT_Annotations/PAINT_Annotatations_TOTAL.txt";
+  if (!$annotationfile) {
+    $annotationfile = "$directory/PAINT_Annotations/PAINT_Annotatations_TOTAL.txt";
+  }
 
   if(!-e $annotationfile){
     die "The PANTHER annotation file, $annotationfile, does not exist.\n";
@@ -465,9 +475,12 @@ sub _graftPipeline{
   my $resString  = _runRAxMLAndAnnotate( $options, $queryid, $matchpthr, $queryfasta);
   
   unless($options->{keep}){
-    my $command = "rm -rf ".$options->{tmpDir}."/*";
-    #TODO - try and replace with perl solution.
-    system($command);
+    my $tmpDir = $options->{tmpDir};
+    if (defined($tmpDir) && $tmpDir ne '' && $tmpDir ne '/' && -d $tmpDir) {
+      my $command = "rm -rf " . $tmpDir . "/*";
+      #TODO - try and replace with perl solution.
+      system($command);
+    }
   }
   return($resString);
 }
@@ -858,6 +871,7 @@ tree grafting pipeline in Perl. This program grafts input sequences in fasta for
     -s for the location of hmmscan
     -o for the output file
     -d for directory of the package like ./treeGrafter1.01
+    -a for the PAINT annotation file path (default: <-d dir>/PAINT_Annotations/PAINT_Annotatations_TOTAL.txt)
     -algo Please specify either -algo <hmmscan|hmmsearch> or -auto, but not both.
     -auto Please specify either -algo <hmmscan|hmmsearch> or -auto, but not both.
     -cpus ?? default is 0
